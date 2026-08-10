@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeLife — Dementia &amp; Alzheimer's Care at Home · PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════ THEME ENGINE ═══════════ */
+:root {
+  --navy:#0D1B2A; --navy-mid:#1A2F45;
+  --critical:#DC2626; --high:#EA580C; --medium:#D97706; --low:#16A34A;
+  --radius:12px;
+  --shadow:0 2px 12px rgba(13,27,42,0.08);
+  --shadow-lg:0 8px 32px rgba(13,27,42,0.14);
+}
+body[data-theme="dementia"] { --accent:#9E8FB2; --accent-dark:#7D6E91; --accent-rgb:158,143,178; }
+body[data-theme="teal"]   { --accent:#14B8A6; --accent-dark:#0D9488; --accent-rgb:20,184,166; }
+body[data-theme="amber"]  { --accent:#F59E0B; --accent-dark:#D97706; --accent-rgb:245,158,11; }
+body[data-theme="rose"]   { --accent:#E11D48; --accent-dark:#BE123C; --accent-rgb:225,29,72; }
+body[data-theme="violet"] { --accent:#7C3AED; --accent-dark:#6D28D9; --accent-rgb:124,58,237; }
+body[data-theme="ocean"]  { --accent:#2563EB; --accent-dark:#1D4ED8; --accent-rgb:37,99,235; }
+body[data-theme="forest"] { --accent:#16A34A; --accent-dark:#15803D; --accent-rgb:22,163,74; }
+body[data-mode="light"] {
+  --bg:#F9F6F0; --surface:#FFFFFF; --surface-2:#EDE6D6; --tile:#F9F6F0;
+  --ink:#0D1B2A; --ink-mid:#3A4A5C; --ink-soft:#6B7A8D; --line:#EDE6D6;
+  --critical-bg:#FEF2F2; --high-bg:#FFF7ED; --medium-bg:#FFFBEB; --low-bg:#F0FDF4;
+}
+body[data-mode="dark"] {
+  --bg:#0B1420; --surface:#13202F; --surface-2:#1C2C3E; --tile:#0F1A28;
+  --ink:#EDF2F7; --ink-mid:#B7C4D1; --ink-soft:#8194A7; --line:#243549;
+  --critical-bg:rgba(220,38,38,.16); --high-bg:rgba(234,88,12,.16);
+  --medium-bg:rgba(217,119,6,.16); --low-bg:rgba(22,163,74,.16);
+  --shadow:0 2px 12px rgba(0,0,0,0.35); --shadow-lg:0 8px 32px rgba(0,0,0,0.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+
+/* ═══════════ TOP BAR ═══════════ */
+.topbar{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 20px;min-height:58px;position:relative;z-index:300;border-bottom:2px solid var(--accent);flex-wrap:wrap;}
+.topbar-brand{display:flex;align-items:center;gap:12px;}
+.topbar-logo{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;font-family:'Sora',sans-serif;color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.4);}
+.topbar-name{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.3px;}
+.topbar-name span{color:var(--accent);}
+.topbar-tagline{font-size:11px;color:rgba(255,255,255,.5);font-style:italic;}
+.topbar-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.progress-pill{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.3);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.progress-pill span{color:#fff;font-size:13px;}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;}
+.tool-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s;position:relative;}
+.tool-btn:hover{background:rgba(var(--accent-rgb),.3);border-color:var(--accent);}
+.tool-btn .tb-label{font-size:11px;}
+@media(max-width:820px){.tool-btn .tb-label{display:none;}.topbar-tagline{display:none;}}
+
+/* ═══════════ DROPDOWN PANELS ═══════════ */
+.dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:10px;display:none;z-index:400;min-width:190px;}
+.dropdown.open{display:block;}
+.dropdown-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink-soft);padding:4px 8px 8px;}
+.theme-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border:none;background:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink);text-align:left;}
+.theme-row:hover{background:rgba(var(--accent-rgb),.08);}
+.theme-row.selected{background:rgba(var(--accent-rgb),.12);}
+.theme-swatch{width:18px;height:18px;border-radius:6px;flex-shrink:0;}
+.theme-row .check-mark{margin-left:auto;color:var(--accent);font-weight:800;}
+
+/* ═══════════ HERO ═══════════ */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#3a2703 100%);padding:48px 32px 40px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(var(--accent-rgb),.14) 0%,transparent 60%);}
+.hero-emoji{font-size:64px;line-height:1;margin-bottom:12px;display:block;position:relative;}
+.hero-title{font-family:'Sora',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-bottom:6px;position:relative;}
+.hero-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:20px;position:relative;}
+.hero-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;}
+.hero-badge{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.35);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:5px;cursor:pointer;transition:background .2s,transform .15s;user-select:none;}
+.hero-badge:hover{background:rgba(var(--accent-rgb),.28);transform:translateY(-1px);}
+
+/* ═══════════ PROGRESS ═══════════ */
+.progress-section{background:var(--surface);border-bottom:1px solid var(--line);padding:0 32px;height:46px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:290;box-shadow:0 2px 8px rgba(13,27,42,.06);}
+.progress-label{font-size:12px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
+.progress-track{flex:1;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:4px;width:0%;transition:width .4s ease;}
+.progress-count{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;}
+.celebrate{display:none;background:linear-gradient(135deg,rgba(var(--accent-rgb),.15),rgba(var(--accent-rgb),.05));border-bottom:1px solid rgba(var(--accent-rgb),.3);padding:14px 32px;text-align:center;font-weight:700;color:var(--accent-dark);font-size:15px;font-family:'Sora',sans-serif;}
+.celebrate.show{display:block;}
+
+/* ═══════════ SEARCH ═══════════ */
+.search-wrap{padding:20px 20px 0;max-width:860px;margin:0 auto;}
+.search-box{width:100%;padding:10px 16px 10px 40px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7A8D' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center;transition:border-color .2s;}
+.search-box:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1);}
+.search-no-results{text-align:center;padding:40px;color:var(--ink-soft);font-size:14px;display:none;}
+
+/* ═══════════ ZONE TABS ═══════════ */
+.zone-tabs{background:var(--surface);border-bottom:2px solid var(--line);display:flex;overflow-x:auto;padding:0 24px;gap:4px;scrollbar-width:none;position:sticky;top:46px;z-index:200;}
+.zone-tabs::-webkit-scrollbar{display:none;}
+.zone-tab{display:flex;align-items:center;gap:7px;padding:14px 18px;border:none;background:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink-soft);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;margin-bottom:-2px;}
+.zone-tab:hover{color:var(--accent);background:rgba(var(--accent-rgb),.05);}
+.zone-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.zone-tab-count{background:var(--surface-2);border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;color:var(--ink-soft);}
+.zone-tab.active .zone-tab-count{background:rgba(var(--accent-rgb),.15);color:var(--accent);}
+
+/* ═══════════ MAIN / STATS ═══════════ */
+.main{max-width:860px;margin:0 auto;padding:28px 20px 60px;}
+.stats-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+.stat-pill{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;user-select:none;}
+.stat-pill:hover{border-color:var(--accent);}
+.stat-pill.filter-on{border-color:var(--accent);background:rgba(var(--accent-rgb),.08);box-shadow:0 0 0 2px rgba(var(--accent-rgb),.15);}
+.stat-dot{width:8px;height:8px;border-radius:50%;}
+.stat-dot.critical{background:var(--critical);}.stat-dot.high{background:var(--high);}.stat-dot.medium{background:var(--medium);}.stat-dot.low{background:var(--low);}
+.stat-count{font-size:15px;font-weight:700;}
+.risk-legend{display:flex;gap:12px;flex-wrap:wrap;margin-left:auto;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink-soft);}
+.legend-dot{width:8px;height:8px;border-radius:3px;}
+
+/* ═══════════ ZONE PANEL ═══════════ */
+.zone-panel{display:none;}
+.zone-panel.active{display:block;}
+.zone-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding:20px 24px;background:var(--surface);border-radius:var(--radius);border:1px solid rgba(var(--accent-rgb),.2);box-shadow:var(--shadow);}
+.zone-icon{width:52px;height:52px;background:linear-gradient(135deg,rgba(var(--accent-rgb),.12),rgba(var(--accent-rgb),.06));border:2px solid rgba(var(--accent-rgb),.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.zone-header-text h2{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.zone-header-text p{font-size:13px;color:var(--ink-soft);}
+
+/* ═══════════ CHECK CARDS ═══════════ */
+.checks-list{display:flex;flex-direction:column;gap:10px;}
+.check-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s;}
+.check-card:hover{box-shadow:var(--shadow-lg);}
+.check-card.completed{border-color:rgba(var(--accent-rgb),.3);background:rgba(var(--accent-rgb),.03);}
+.check-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;}
+.check-checkbox{width:22px;height:22px;min-width:22px;border:2px solid var(--surface-2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:13px;background:var(--surface);}
+.check-card.completed .check-checkbox{background:var(--accent);border-color:var(--accent);color:#fff;}
+.check-num{font-size:10px;font-weight:700;color:var(--ink-soft);min-width:30px;font-family:'Sora',sans-serif;}
+.check-risk{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+.risk-critical{background:var(--critical-bg);color:var(--critical);}
+.risk-high{background:var(--high-bg);color:var(--high);}
+.risk-medium{background:var(--medium-bg);color:var(--medium);}
+.risk-low{background:var(--low-bg);color:var(--low);}
+.check-title{flex:1;font-size:14px;font-weight:600;color:var(--ink);line-height:1.4;}
+.check-card.completed .check-title{color:var(--ink-soft);text-decoration:line-through;}
+.check-chevron{font-size:12px;color:var(--ink-soft);transition:transform .25s;min-width:16px;}
+.check-card.open .check-chevron{transform:rotate(180deg);}
+.check-detail{display:none;padding:0 18px 18px 18px;border-top:1px solid var(--line);}
+.check-card.open .check-detail{display:block;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:600px){.detail-grid{grid-template-columns:1fr;}}
+.detail-item{background:var(--tile);border-radius:8px;padding:11px 13px;}
+.detail-item.full{grid-column:1/-1;}
+.detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--accent-dark);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+body[data-mode="dark"] .detail-label{color:var(--accent);}
+.detail-value{font-size:13px;color:var(--ink);line-height:1.55;}
+.tip-box{margin-top:12px;background:linear-gradient(135deg,rgba(var(--accent-rgb),.08),rgba(var(--accent-rgb),.04));border:1px solid rgba(var(--accent-rgb),.25);border-left:4px solid var(--accent);border-radius:8px;padding:11px 14px;display:flex;gap:10px;align-items:flex-start;}
+.tip-icon{font-size:16px;line-height:1;margin-top:1px;}
+.tip-text{font-size:13px;color:var(--ink);line-height:1.55;}
+.tip-text strong{color:var(--accent-dark);font-weight:700;}
+body[data-mode="dark"] .tip-text strong{color:var(--accent);}
+.measurement-box{margin-top:10px;background:rgba(var(--accent-rgb),.05);border:1px solid var(--line);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--ink-mid);line-height:1.5;font-family:'Sora',sans-serif;}
+.measurement-box strong{color:var(--ink);font-size:11px;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px;}
+
+/* ═══════════ ZONE ACTIONS ═══════════ */
+.zone-actions{display:flex;justify-content:flex-end;gap:10px;margin:14px 0 18px;flex-wrap:wrap;}
+.btn{padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-outline{background:var(--surface);border:1px solid var(--line);color:var(--ink-mid);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.3);}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(var(--accent-rgb),.4);transform:translateY(-1px);}
+
+/* ═══════════ MODALS ═══════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(13,27,42,.6);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:16px;max-width:640px;width:100%;box-shadow:var(--shadow-lg);border-top:4px solid var(--accent);}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line);}
+.modal-head h3{font-family:'Sora',sans-serif;font-size:18px;color:var(--ink);display:flex;align-items:center;gap:8px;}
+.modal-close{background:none;border:none;font-size:22px;color:var(--ink-soft);cursor:pointer;line-height:1;padding:4px;}
+.modal-close:hover{color:var(--accent);}
+.modal-body{padding:20px 24px 26px;color:var(--ink-mid);font-size:13.5px;}
+.modal-body h4{font-family:'Sora',sans-serif;font-size:14px;color:var(--ink);margin:16px 0 6px;display:flex;align-items:center;gap:6px;}
+.modal-body h4:first-child{margin-top:0;}
+.modal-body p{margin-bottom:8px;}
+.modal-body table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0;}
+.modal-body th{text-align:left;padding:7px 10px;background:rgba(var(--accent-rgb),.1);color:var(--ink);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+.modal-body td{padding:7px 10px;border-bottom:1px solid var(--line);color:var(--ink-mid);}
+.modal-body td strong{color:var(--ink);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:0 24px 22px;flex-wrap:wrap;}
+.rule-list{list-style:none;margin:6px 0;}
+.rule-list li{padding:6px 0 6px 26px;position:relative;border-bottom:1px dashed var(--line);}
+.rule-list li::before{content:'✓';position:absolute;left:2px;color:var(--accent);font-weight:800;}
+
+/* ═══════════ COLLECTION / UPSELL ═══════════ */
+.collection{max-width:860px;margin:0 auto;padding:10px 20px 50px;}
+.collection h3{font-family:'Sora',sans-serif;font-size:18px;color:var(--ink);margin-bottom:4px;}
+.collection>p{font-size:13px;color:var(--ink-soft);margin-bottom:16px;}
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
+.module-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;transition:all .2s;}
+.module-card:hover{border-color:var(--accent);box-shadow:var(--shadow);}
+.module-card .m-emoji{font-size:26px;}
+.module-card .m-name{font-family:'Sora',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink);}
+.module-card .m-age{font-size:11.5px;color:var(--ink-soft);}
+.module-tag{margin-top:6px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:6px;padding:3px 8px;align-self:flex-start;}
+.module-tag.owned{background:rgba(var(--accent-rgb),.15);color:var(--accent-dark);}
+body[data-mode="dark"] .module-tag.owned{color:var(--accent);}
+.module-tag.addon{background:var(--surface-2);color:var(--ink-soft);}
+.module-tag.coming{background:transparent;color:var(--ink-soft);border:1px dashed var(--line);}
+
+/* ═══════════ FOOTER ═══════════ */
+.footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px;line-height:1.8;}
+.footer strong{color:rgba(255,255,255,.8);}
+
+/* ═══════════ TRADEMARK ICON SET ═══════════ */
+.zic svg{width:16px;height:16px;vertical-align:-3px;}
+.zone-tab .zic svg{color:inherit;}
+.topbar-logo svg{width:22px;height:22px;color:#fff;}
+.hero-emoji svg{width:72px;height:72px;color:var(--accent);filter:drop-shadow(0 4px 14px rgba(var(--accent-rgb),.45));}
+.zone-icon svg{width:27px;height:27px;color:var(--accent-dark);}
+body[data-mode="dark"] .zone-icon svg{color:var(--accent);}
+.module-card .m-emoji svg{width:30px;height:30px;color:var(--accent-dark);}
+body[data-mode="dark"] .module-card .m-emoji svg{color:var(--accent);}
+
+/* ═══════════ FLOATING NAV / DISCLAIMERS ═══════════ */
+html{scroll-behavior:smooth;}
+.float-nav{position:fixed;right:16px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:250;}
+html[dir="rtl"] .float-nav{right:auto;left:16px;}
+.float-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent-dark);font-size:18px;font-weight:800;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .2s;}
+.float-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-2px);}
+body[data-mode="dark"] .float-btn{color:var(--accent);}
+.zone-disclaimer{margin-top:18px;padding:10px 14px;border:1px dashed var(--line);border-radius:8px;font-size:11.5px;color:var(--ink-soft);text-align:center;}
+.print-disclaimer{display:none;}
+
+/* ═══════════ PRINT ═══════════ */
+#cheat-print{display:none;}
+@media print{
+  body{background:#fff !important;color:#000;font-size:11px;margin:0 !important;padding:0 !important;}
+  .topbar,.hero,.search-wrap,.zone-tabs,.progress-section,.zone-actions,.stats-bar,.collection,.modal-overlay,.celebrate,.dropdown{display:none !important;}
+  .main{max-width:100%;padding:0 0 30px;}
+  .check-card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid;margin-bottom:6px;}
+  .check-detail{display:block !important;border-top:1px solid #ddd;}
+  .check-chevron{display:none;}
+  .zone-panel{display:block !important;page-break-before:auto;}
+  .zone-header{box-shadow:none;border:1px solid #ccc;margin-top:14px;}
+  body.print-zone .zone-panel{display:none !important;}
+  body.print-zone .zone-panel.active{display:block !important;}
+  body.print-cheat .main,body.print-cheat .footer,body.print-cheat .zone-panel,body.print-cheat .print-disclaimer{display:none !important;}
+  body.print-cheat #cheat-print{display:block !important;}
+  #cheat-print{margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cp-card{border:2.5px solid #0D1B2A;border-radius:16px;overflow:hidden;font-family:'Inter',sans-serif;color:#0D1B2A;height:272mm;display:flex;flex-direction:column;page-break-inside:avoid;page-break-after:avoid;}
+  .cp-head{background:#0D1B2A !important;color:#fff;display:flex;align-items:center;gap:12px;padding:13px 22px;}
+  .cp-head svg{width:38px;height:38px;color:var(--accent);}
+  .cp-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;line-height:1.2;}
+  .cp-title em{color:var(--accent);font-style:normal;}
+  .cp-sub{font-size:11.5px;color:rgba(255,255,255,.78);margin-top:2px;}
+  .cp-tag{margin-left:auto;font-size:10px;font-style:italic;color:rgba(255,255,255,.65);text-align:right;}
+  .cp-contacts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:11px 22px;background:rgba(var(--accent-rgb),.09) !important;}
+  .cp-chip{border:1.2px solid rgba(var(--accent-rgb),.55);border-radius:8px;padding:5px 9px;background:#fff !important;}
+  .cp-chip b{display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--accent-dark);}
+  .cp-chip span{font-size:12px;font-weight:700;}
+  .cp-cols{display:flex;gap:20px;padding:13px 22px 6px;flex:1;min-height:0;overflow:hidden;}
+  .cp-cols h3{font-family:'Sora',sans-serif;font-size:13px;border-bottom:2px solid var(--accent);padding-bottom:3px;margin:0 0 8px;}
+  .cp-rules{flex:1.15;}
+  .cp-rules ul{list-style:none;margin:0;padding:0;}
+  .cp-rules li{font-size:11px;line-height:1.5;padding:4px 0 4px 18px;position:relative;border-bottom:1px dashed #ddd;}
+  .cp-rules li::before{content:'✓';position:absolute;left:0;color:var(--accent-dark);font-weight:800;}
+  html[dir="rtl"] .cp-rules li{padding:4px 18px 4px 0;}
+  html[dir="rtl"] .cp-rules li::before{left:auto;right:0;}
+  .cp-numsec{flex:1;}
+  .cp-numsec table{width:100%;border-collapse:collapse;font-size:10.5px;}
+  .cp-numsec td{border-bottom:1px solid #eee;padding:4px 5px;vertical-align:top;}
+  .cp-numsec td strong{color:#0D1B2A;}
+  .cp-notes{margin:6px 22px 10px;border:1.5px dashed var(--accent);border-radius:10px;padding:8px 13px;font-size:11px;white-space:pre-wrap;max-height:34mm;overflow:hidden;}
+  .cp-notes b{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent-dark);display:block;margin-bottom:2px;}
+  .cp-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#0D1B2A !important;color:rgba(255,255,255,.85);padding:9px 22px;font-size:10px;line-height:1.55;margin-top:auto;}
+  .cp-foot b{color:var(--accent);}
+  .cp-qr{display:flex;align-items:center;gap:10px;text-align:right;}
+  .cp-qr img{width:68px;height:68px;background:#fff;border-radius:8px;padding:3px;}
+  .cp-qr .qr-ph{width:68px;height:68px;border:1.5px dashed rgba(255,255,255,.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:8.5px;text-align:center;color:rgba(255,255,255,.6);padding:4px;}
+  .footer{background:#fff;color:#555;}
+  .footer strong{color:#000;}
+  .float-nav{display:none !important;}
+  .print-disclaimer{display:block !important;position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:8.5px;color:#666;border-top:1px solid #ccc;padding:3px 0;background:#fff;}
+  @page{size:A4;margin:10mm 10mm 12mm;}
+}
+</style>
+</head>
+<body data-theme="dementia" data-mode="light">
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo" id="logo-icon">S</div>
+    <div>
+      <div class="topbar-name">Safe<span>Life</span></div>
+      <div class="topbar-tagline">To all moms by a mom · NEBOSH &amp; OSHA Professional</div>
+    </div>
+  </div>
+  <div class="topbar-meta">
+    <div class="toolbar">
+      <button class="tool-btn" id="btn-search" title="Search all checks">🔍</button>
+      <button class="tool-btn" id="btn-manual" title="User Manual">📖<span class="tb-label" data-i18n="manual">Manual</span></button>
+      <button class="tool-btn" id="btn-cheat" title="Emergency Cheat Sheet">🚨<span class="tb-label" data-i18n="cheat">Cheat Sheet</span></button>
+      <button class="tool-btn" id="btn-print" title="Print / Save as PDF">🖨️<span class="tb-label" data-i18n="printPdf">Print / PDF</span></button>
+      <button class="tool-btn" id="btn-save" title="Save progress to file">💾<span class="tb-label" data-i18n="save">Save</span></button>
+      <button class="tool-btn" id="btn-load" title="Load saved progress">📂<span class="tb-label" data-i18n="load">Load</span></button>
+      <button class="tool-btn" id="btn-lang" title="Language" style="display:none">🌐<span class="tb-label" id="lang-label">EN</span>
+        <div class="dropdown" id="dd-lang"></div>
+      </button>
+      <button class="tool-btn" id="btn-theme" title="Colour theme">🎨<span class="tb-label" data-i18n="theme">Theme</span>
+        <div class="dropdown" id="dd-theme"></div>
+      </button>
+      <button class="tool-btn" id="btn-mode" title="Light / dark mode">🌙</button>
+    </div>
+    <div class="progress-pill"><span id="topbar-done">0</span>&nbsp;/ 84 <span data-i18n="checksDone" style="color:inherit;font-size:12px;">checks done</span></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji" id="hero-icon">🏠</span>
+  <div class="hero-title" data-i18n="heroTitle">Dementia &amp; Alzheimer's Care at Home</div>
+  <div class="hero-subtitle" data-i18n="heroSub">84 dignity-first safety checks across 6 zones · Protecting your family member while preserving their independence and identity</div>
+  <div class="hero-badges">
+    <div class="hero-badge" data-zone="1"><span class="zic" data-zi="z1"></span> <span data-i18n="bz1">Wandering &amp; Exit Safety</span></div>
+    <div class="hero-badge" data-zone="2"><span class="zic" data-zi="z2"></span> <span data-i18n="bz2">Kitchen &amp; Fire</span></div>
+    <div class="hero-badge" data-zone="3"><span class="zic" data-zi="z3"></span> <span data-i18n="bz3">Medication &amp; Chemicals</span></div>
+    <div class="hero-badge" data-zone="4"><span class="zic" data-zi="z4"></span> <span data-i18n="bz4">Falls &amp; Mobility</span></div>
+    <div class="hero-badge" data-zone="5"><span class="zic" data-zi="z5"></span> <span data-i18n="bz5">Identity &amp; Orientation</span></div>
+    <div class="hero-badge" data-zone="6"><span class="zic" data-zi="z6"></span> <span data-i18n="bz6">Caregiver &amp; Emergency</span></div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-section">
+  <div class="progress-label" data-i18n="overallProgress">Overall Progress</div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-count" id="progress-count">0 of 84</div>
+</div>
+<div class="celebrate" id="celebrate">🎉 <span data-i18n="celebrate">All 84 checks complete — your home supports safety and dignity together. Print your checklist as a keepsake.</span></div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <input class="search-box" type="text" id="search-input" placeholder="Search checks… e.g. door alarm, GPS tracker, dosette box, grab bars, calm redirection, respite care…">
+</div>
+
+<!-- ZONE TABS -->
+<div class="zone-tabs" id="zone-tabs">
+  <button class="zone-tab active" data-zone="1"><span class="zic" data-zi="z1"></span> <span data-i18n="z1">Wandering &amp; Exit Safety</span> <span class="zone-tab-count" id="ztc-1">0/14</span></button>
+  <button class="zone-tab" data-zone="2"><span class="zic" data-zi="z2"></span> <span data-i18n="z2">Kitchen &amp; Fire Safety</span> <span class="zone-tab-count" id="ztc-2">0/14</span></button>
+  <button class="zone-tab" data-zone="3"><span class="zic" data-zi="z3"></span> <span data-i18n="z3">Medication &amp; Chemical Safety</span> <span class="zone-tab-count" id="ztc-3">0/14</span></button>
+  <button class="zone-tab" data-zone="4"><span class="zic" data-zi="z4"></span> <span data-i18n="z4">Falls, Mobility &amp; Layout</span> <span class="zone-tab-count" id="ztc-4">0/14</span></button>
+  <button class="zone-tab" data-zone="5"><span class="zic" data-zi="z5"></span> <span data-i18n="z5">Identity &amp; Orientation</span> <span class="zone-tab-count" id="ztc-5">0/14</span></button>
+  <button class="zone-tab" data-zone="6"><span class="zic" data-zi="z6"></span> <span data-i18n="z6">Caregiver &amp; Emergency Prep</span> <span class="zone-tab-count" id="ztc-6">0/14</span></button>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-content">
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-pill" data-risk="critical"><span class="stat-dot critical"></span><span class="stat-count" id="s-critical">0</span> <span data-i18n="critical">Critical</span></div>
+    <div class="stat-pill" data-risk="high"><span class="stat-dot high"></span><span class="stat-count" id="s-high">0</span> <span data-i18n="high">High</span></div>
+    <div class="stat-pill" data-risk="medium"><span class="stat-dot medium"></span><span class="stat-count" id="s-medium">0</span> <span data-i18n="medium">Medium</span></div>
+    <div class="stat-pill" data-risk="low"><span class="stat-dot low"></span><span class="stat-count" id="s-low">0</span> <span data-i18n="low">Low</span></div>
+    <div class="risk-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--critical)"></div><span data-i18n="legendCritical">Critical = immediate action</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--high)"></div><span data-i18n="legendHigh">High = urgent attention</span></div>
+    </div>
+  </div>
+  <div id="search-no-results" class="search-no-results"><span data-i18n="noResults">No checks match your search. Try different keywords.</span><br><span data-i18n="notCovered" style="font-size:12.5px;"></span></div>
+</div>
+
+<!-- COLLECTION -->
+<div class="collection">
+  <h3 data-i18n="collTitle">The SafeLife Collection</h3>
+  <p data-i18n="collSub">One safety system for every stage of life. Add more modules any time — each works exactly like this one.</p>
+  <div class="collection-grid" id="collection-grid"></div>
+</div>
+
+<!-- SITUATION MODULES -->
+<div class="collection" style="padding-top:0;">
+  <h3>Situation Modules</h3>
+  <p>Real-life situations and conditions — each its own complete, standalone 84-check system. Available separately as they launch.</p>
+  <div class="collection-grid" id="situation-grid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <strong>SafeLife</strong> · Dementia &amp; Alzheimer's Care at Home · PRO Edition<br>
+  Created by a NEBOSH &amp; OSHA trained HSE professional · "To all moms by a mom"<br>
+  Evidence base: WHO dementia and healthy-ageing guidance · WHO iSupport for dementia carers · WHO Global report on falls prevention in older age · WHO Medication Without Harm · Alzheimer's Disease International guidance · recognised dementia-care and home-safety practice<br>
+  <span style="color:rgba(255,255,255,.35);" data-i18n="disclaimer">This checklist is educational and does not replace professional medical or care advice. Always consult your doctor, a dementia care specialist, or a qualified healthcare professional for guidance specific to your family member's needs.</span>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-manual">
+  <div class="modal">
+    <div class="modal-head"><h3>📖 <span data-i18n="manualTitle">User Manual</span></h3><button class="modal-close" data-close="modal-manual">✕</button></div>
+    <div class="modal-body" id="manual-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cheat">
+  <div class="modal">
+    <div class="modal-head"><h3>🚨 <span data-i18n="cheatTitle">Emergency Cheat Sheet</span></h3><button class="modal-close" data-close="modal-cheat">✕</button></div>
+    <div class="modal-body" id="cheat-body"></div>
+    <div class="modal-actions"><button class="btn btn-outline" id="btn-seller" title="Seller: set this product's QR code" style="margin-right:auto;">⚙</button><button class="btn btn-primary" id="btn-print-cheat" data-i18n="printCheat">🖨️ Print cheat sheet</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-seller">
+  <div class="modal">
+    <div class="modal-head"><h3>⚙ Seller Settings</h3><button class="modal-close" data-close="modal-seller">✕</button></div>
+    <div class="modal-body" id="seller-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-print">
+  <div class="modal">
+    <div class="modal-head"><h3>🖨️ <span data-i18n="printTitle">Print or Save as PDF</span></h3><button class="modal-close" data-close="modal-print">✕</button></div>
+    <div class="modal-body">
+      <p data-i18n="printHint">Choose what to print. To save as a PDF instead of printing on paper, choose "Save as PDF" as the printer in the print dialog.</p>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px;" data-i18n="printNote">All checks are automatically expanded to full detail when printing — no need to open them first.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="print-zone" data-i18n="printZone">Current zone only</button>
+      <button class="btn btn-outline" id="print-cheat2" data-i18n="printCheat2">Cheat sheet</button>
+      <button class="btn btn-primary" id="print-all" data-i18n="printAll">Full checklist (all 84)</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="load-file" accept=".json" style="display:none">
+
+<!-- FLOATING CHECK NAVIGATION -->
+<div class="float-nav">
+  <button class="float-btn" id="fn-top" title="Back to top">⤒</button>
+  <button class="float-btn" id="fn-prev" title="Previous check">↑</button>
+  <button class="float-btn" id="fn-next" title="Next check">↓</button>
+</div>
+
+<!-- PRINT PAGE DISCLAIMER (repeats on every printed page) -->
+<div class="print-disclaimer" data-i18n="disclaimer">This checklist is educational and does not replace professional medical or care advice. Always consult your doctor, a dementia care specialist, or a qualified healthcare professional for guidance specific to your family member's needs.</div>
+
+<div id="cheat-print"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// SELLER BRANDING — edit these three lines to make it yours
+// ═══════════════════════════════════════════
+const BRAND_NAME = 'The Snag Tag';
+const STORE_URL  = '';   // e.g. 'thesnagtag.gumroad.com' — printed under the QR code on the cheat sheet
+const QR_IMAGE   = '';   // paste your QR code as a data URL: 'data:image/png;base64,...'
+
+// ═══════════════════════════════════════════
+// I18N — full interface language packs (check content in English, verified guidance)
+// ═══════════════════════════════════════════
+const I18N = {
+en:{name:'English',manual:'Manual',cheat:'Cheat Sheet',printPdf:'Print / PDF',save:'Save',load:'Load',theme:'Theme',checksDone:'checks done',heroTitle:'Dementia & Alzheimer\'s Care at Home',heroSub:'84 dignity-first safety checks across 6 zones · Protecting your family member while preserving their independence and identity',bz1:'Wandering & Exit Safety',bz2:'Kitchen & Fire',bz3:'Medication & Chemicals',bz4:'Falls & Mobility',bz5:'Identity & Orientation',bz6:'Caregiver & Emergency',overallProgress:'Overall Progress',ofWord:'of',z1:'Wandering & Exit Safety',z2:'Kitchen & Fire Safety',z3:'Medication & Chemical Safety',z4:'Falls, Mobility & Layout',z5:'Identity & Orientation',z6:'Caregiver & Emergency Prep',zd1:'14 checks: door and window alarms, GPS tools used with dignity, ID bracelets, neighbour awareness, and a home that is secure without feeling like a lock-up.',zd2:'14 checks: stove and oven shut-off, smoke alarms, matches and candles, appliance safety and shared meal preparation.',zd3:'14 checks: locked medication storage, dosette boxes, poison awareness, cleaning-product storage and safe disposal.',zd4:'14 checks: lighting, decluttered pathways, flooring, bathroom grab bars, stair safety and safe mobility aids.',zd5:'14 checks: labelling, visible clocks and calendars, simplified routines, calm redirection and preserving dignity.',zd6:'14 checks: recognising caregiver burnout, respite care, emergency information, and planning care transitions with compassion.',critical:'Critical',high:'High',medium:'Medium',low:'Low',legendCritical:'Critical = immediate action',legendHigh:'High = urgent attention',noResults:'No checks match your search. Try different keywords.',searchPh:'Search checks… e.g. door alarm, GPS tracker, dosette box, grab bars, calm redirection, respite care…',who:'Who',what:'What',where:'Where',why:'Why',how:'How',standards:'Standards & Measurements',example:'Real-World Example',quickTip:'Quick Win',markAll:'Mark All Complete',unmarkAll:'Unmark All',expandAll:'Expand All',collapseAll:'Collapse All',celebrate:'All 84 checks complete — your home supports safety and dignity together. Print your checklist as a keepsake.',collTitle:'The SafeLife Collection',collSub:'One safety system for every stage of life. Every module below is a complete, standalone 84-check system — available separately, or as the full 12-module bundle.',owned:'✓ Current Module',addon:'Available Separately',disclaimer:'This checklist is educational and does not replace professional medical or care advice. Always consult your doctor, a dementia care specialist, or a qualified healthcare professional for guidance specific to your family member\'s needs.',manualTitle:'User Manual',cheatTitle:'Emergency Cheat Sheet',printTitle:'Print or Save as PDF',printHint:'Choose what to print. To save as a PDF instead of printing on paper, choose "Save as PDF" as the printer in the print dialog.',printZone:'Current zone only',printCheat2:'Cheat sheet',printAll:'Full checklist (all 84)',printCheat:'🖨️ Print cheat sheet',langNote:'Safety check content is written in English (verified international guidance). Interface labels switch language.',saved:'Progress saved',loaded:'Progress loaded',cheatContacts:'My emergency contacts',cheatHint:'Make it yours: edit any name or number, add or delete rows. Everything saves automatically on this device and prints on your cheat sheet.',addContact:'+ Add contact',myNotes:'My notes',notesPh:'Allergies, medications, door codes for respite carers, your family member\'s routine and preferences…',rules:'The 10 golden rules',keyNums:'Key measurements at a glance',delRow:'Remove',notCovered:'Topic not covered in this module? Check the cheat sheet, ask your health professional, or request it via your SafeLife store page — new checks arrive in free updates.',printNote:'All checks are automatically expanded to full detail when printing — no need to open them first.',mn1:'Newborn',mn2:'Infant',mn3:'Toddler',mn4:'Preschooler',mn5:'School-Age',mn6:'Teenager',mn7:'Young Adult',mn8:'Adult',mn9:'Middle-Aged Adult',mn10:'Active Seniors',mn11:'Advanced Age',mn12:'90+ and Longevity',
+manualBody:'<h4>🚀 Getting started</h4><p>84 checks in 6 zones. Tap any check to see Who / What / Where / Why / How, exact measurements and standards, a real-world example and a quick-win tip.</p><h4>✅ Progress</h4><p>Tick the box to complete a check — bars and counters update instantly. Each zone has Mark All / Unmark All and Expand / Collapse All buttons, and the floating ↑ ↓ arrows jump between checks.</p><h4>🔍 Search &amp; filters</h4><p>The search box filters all 84 checks live across every zone. Tap a risk pill (Critical / High / Medium / Low) to filter by risk level; tap again to clear.</p><h4>🎨 Personalise</h4><p>Pick a colour theme and light or dark mode — remembered on this device. Make the cheat sheet yours: add your own emergency numbers and notes.</p><h4>💾 Save &amp; 🖨️ Print</h4><p>Progress saves automatically on this device as you go. To move your progress to another device or keep a backup, tap 💾 Save — this downloads a small file. On the new device (or after clearing your browser), open the same checklist, tap 📂 Load, and choose that file to restore your progress exactly where you left off. Keep the file somewhere safe, like your email or a notes app. Print the full checklist, one zone, or your personalised cheat sheet — all checks expand automatically when printing. Choose "Save as PDF" in the print dialog to create a PDF.</p>'}
+};
+
+// ═══════════════════════════════════════════
+// TRADEMARK ICON SET — same outline family as the whole collection
+// ═══════════════════════════════════════════
+const _svg = inner => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>';
+const ICONS = {
+  stage: _svg('<path d="M4 11.5l8-6.8 8 6.8"/><path d="M6.2 10.2V19a1 1 0 0 0 1 1h9.6a1 1 0 0 0 1-1v-8.8"/><path d="M9.4 19v-4.6h5.2V19"/><path d="M9 13l2.2 1.6 3.4-3"/>'),
+  z1: _svg('<path d="M8 20V4h8v16"/><path d="M8 4H5.6A1.6 1.6 0 0 0 4 5.6V20"/><circle cx="13.6" cy="12" r="0.75" fill="currentColor" stroke="none"/><path d="M17 8l2.2 2-2.2 2"/>'),
+  z2: _svg('<path d="M12 3.2c-1.1 2.9-3.8 4.3-3.8 8 0 2.2 1.7 4 3.8 4s3.8-1.8 3.8-4c0-1.5-.7-2.5-1.5-3.4.2 1.5-.6 2.3-1.4 2.3-.9 0-1.4-.8-1-1.9.3-.8-.1-1.7-1-3z"/><path d="M7.5 20h9"/>'),
+  z3: _svg('<rect x="7.5" y="9" width="9" height="11" rx="2.2"/><path d="M9 9V6.4a3 3 0 0 1 6 0V9"/><path d="M12 13.2v3"/>'),
+  z4: _svg('<path d="M4 20h4v-4h4v-4h4v-4h4"/><circle cx="19.2" cy="4.8" r="1.6"/>'),
+  z5: _svg('<circle cx="12" cy="12.5" r="7"/><path d="M12 8V12.5l3 2"/><path d="M9.2 3.5h5.6"/>'),
+  z6: _svg('<path d="M12 19.6C6.3 15.4 3.7 12.2 3.7 9a4.3 4.3 0 0 1 8.2-1.8A4.3 4.3 0 0 1 20.1 9c0 3.2-2.6 6.4-8.1 10.6z"/><path d="M4.2 20.8h15.6"/>'),
+  stages: [
+    _svg('<circle cx="12" cy="13" r="6.5"/><path d="M12 6.5c0-1.8.8-2.7 2.3-3"/><circle cx="9.7" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><circle cx="14.3" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><path d="M9.9 15c1.4 1.2 2.8 1.2 4.2 0"/>'),
+    _svg('<circle cx="12" cy="7" r="3.2"/><path d="M6.8 20.5v-3.2a5.2 5.2 0 0 1 10.4 0v3.2"/>'),
+    _svg('<path d="M12 3.5l2.5 5.2 5.7.8-4.1 4 1 5.7-5.1-2.7-5.1 2.7 1-5.7-4.1-4 5.7-.8z"/>'),
+    _svg('<rect x="6.5" y="8" width="11" height="12" rx="3"/><path d="M9.5 8V6.2a2.5 2.5 0 0 1 5 0V8"/><rect x="9.7" y="13" width="4.6" height="4" rx="1"/><path d="M6.5 11.5h11"/>'),
+    _svg('<path d="M5 15v-1.5a7 7 0 0 1 14 0V15"/><rect x="4" y="14" width="3.4" height="6" rx="1.6"/><rect x="16.6" y="14" width="3.4" height="6" rx="1.6"/>'),
+    _svg('<path d="M12 4.5L2.8 9l9.2 4.5L21.2 9z"/><path d="M6.8 11.5v3.8c0 1.6 10.4 1.6 10.4 0v-3.8"/><path d="M21.2 9v5"/>'),
+    _svg('<rect x="3.8" y="8" width="16.4" height="11.2" rx="2"/><path d="M9.5 8V6.6A1.6 1.6 0 0 1 11.1 5h1.8a1.6 1.6 0 0 1 1.6 1.6V8M3.8 12.8h16.4"/>'),
+    _svg('<path d="M8.5 9.5v-4c2.3 1.8 4.7 1.8 7 0v4a3.5 3.5 0 0 1-7 0z"/><path d="M12 13v8M12 18c-1.8-.4-3-1.4-3.6-3"/>'),
+    _svg('<circle cx="8.5" cy="5" r="2.1"/><path d="M8.5 7.1c-1.2.4-2 1.5-2 2.8v1.8"/><path d="M8.7 9.6c3.4 0 5.8 2.5 5.8 5.7 0 2.2-1.2 3.9-3 4.9"/><path d="M6.5 11.7v3.4c0 2.2 1 3.9 2.7 5"/>'),
+    _svg('<circle cx="12" cy="5.8" r="2.3"/><path d="M8.2 17.3a3.8 3.8 0 0 1 7.6 0v1.2"/><path d="M6.6 20.5h10.8"/><path d="M8.6 20.5v-3.2M15.4 20.5v-3.2"/><path d="M12 13.4c-.9-.8-1.5-1.3-1.5-1.9a.85.85 0 0 1 1.5-.55.85.85 0 0 1 1.5.55c0 .6-.6 1.1-1.5 1.9z"/>'),
+    _svg('<circle cx="7" cy="5.3" r="2.2"/><path d="M4 19v-3.4a3.4 3.4 0 0 1 3.4-3.4h.6a3.4 3.4 0 0 1 2.6 1.2l1 1.2"/><circle cx="17" cy="9.4" r="1.7"/><path d="M13.9 19v-2.4a2.6 2.6 0 0 1 2.6-2.6h1a2.6 2.6 0 0 1 2.6 2.6V19"/><path d="M9.5 15.3l2.7 1.4"/>'),
+    _svg('<path d="M6.4 8.1c-2.2 0-4 1.8-4 3.9s1.8 3.9 4 3.9c3.4 0 5.2-2.5 5.7-3.9.5-1.4 2.3-3.9 5.7-3.9 2.2 0 4 1.8 4 3.9s-1.8 3.9-4 3.9c-3.4 0-5.2-2.5-5.7-3.9-.5-1.4-2.3-3.9-5.6-3.9z"/>'),
+    _svg('<path d="M8.5 8.2V6.6a3.5 3.5 0 0 1 7 0v1.6"/><rect x="4.3" y="8.2" width="15.4" height="11.8" rx="3.6"/><path d="M4.3 13.2h15.4"/><rect x="10.4" y="10.6" width="3.2" height="2" rx="0.5"/>'),
+    _svg('<circle cx="7.8" cy="12" r="5.3"/><circle cx="16.2" cy="12" r="5.3"/><circle cx="6.3" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><circle cx="9.3" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><circle cx="14.7" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><circle cx="17.7" cy="11.2" r="0.6" fill="currentColor" stroke="none"/><path d="M6.5 13.8c.9.7 1.8.7 2.7 0M14.9 13.8c.9.7 1.8.7 2.7 0"/>'),
+    _svg('<rect x="6" y="4.6" width="12" height="16.4" rx="2.2"/><path d="M9.4 4.6V3.7A1.7 1.7 0 0 1 11.1 2h1.8a1.7 1.7 0 0 1 1.7 1.7v.9"/><path d="M9 13.2l2.2 2.2L15.5 11"/>'),
+    _svg('<path d="M4 11.5l8-6.8 8 6.8"/><path d="M6.2 10.2V19a1 1 0 0 0 1 1h9.6a1 1 0 0 0 1-1v-8.8"/><path d="M9.4 19v-4.6h5.2V19"/><path d="M9 13l2.2 1.6 3.4-3"/>')
+  ]
+};
+function injectIcons(){
+  document.getElementById('logo-icon').innerHTML = ICONS.stage;
+  document.getElementById('hero-icon').innerHTML = ICONS.stage;
+  document.querySelectorAll('.zic[data-zi]').forEach(el=>{ el.innerHTML = ICONS[el.dataset.zi] || ''; });
+}
+// ═══════════════════════════════════════════
+// ALL 84 CHECKS — DEMENTIA & ALZHEIMER'S CARE AT HOME
+// ═══════════════════════════════════════════
+const ZONES = [
+  {
+    id: 1, name: 'Wandering & Exit Safety', icon: '🚪',
+    desc: '14 checks covering door and window alarms, GPS tools used with dignity, ID bracelets, neighbour awareness, and a home that is secure without feeling like a lock-up.',
+    checks: [
+      { id:'dm01', num:'DM01', risk:'critical', title:'Door and Window Alarms or Chimes at Every Exterior Exit',
+        who:'Families supporting a person with dementia who is still mobile and may attempt to leave unnoticed',
+        what:'An exterior door or ground-floor window opened without anyone aware, especially at night',
+        where:'Every external door and any easily accessible ground-floor window',
+        why:'Leaving a familiar setting without others knowing — sometimes called exit-seeking — is one of the most common safety concerns in home dementia care. A simple audible alert gives the household time to respond calmly before anyone is at risk outdoors.',
+        how:'Fit a battery or plug-in door/window chime or alarm that sounds when the door is opened — these are widely available and do not need professional installation. Keep it simple and non-punitive: the aim is early awareness, not restriction.',
+        measurement:'Alarm/chime response time: sound should be audible from any room in under 3 seconds; check battery monthly.',
+        example:'A door chime alerts a spouse at 2am that the front door has opened. He is able to gently guide his wife back inside within a minute, before she reaches the street.',
+        tip:'Position the chime receiver in the bedroom used most at night — an alert that no one hears defeats the purpose.' },
+
+      { id:'dm02', num:'DM02', risk:'critical', title:'Recognising Wandering Triggers Early',
+        who:'Caregivers observing changes in restlessness, especially in the late afternoon and evening',
+        what:'Increased pacing, agitation, or attempts to "go home" or "go to work" that often precede exit-seeking',
+        where:'Throughout the home, most often in early evening',
+        why:'A pattern sometimes called sundowning — increased confusion and restlessness later in the day — often precedes attempts to leave. Recognising the pattern lets you intervene with comfort and redirection before it becomes an exit risk.',
+        how:'Keep a simple log of when restlessness increases. Offer a calm activity, a snack, or a walk in a secure garden at the times it typically appears. Reduce evening noise and clutter, and keep lighting warm and consistent as dusk falls.',
+        measurement:'General pattern: restlessness often rises in the hours before and after dusk; log timing for a week to find your own pattern.',
+        example:'A caregiver notices her father becomes anxious and searches for his coat most evenings around the same time. Starting a calm folding-laundry activity at that time reduces his urge to leave.',
+        tip:'Anticipating the trigger is more effective than reacting to the exit attempt.' },
+
+      { id:'dm03', num:'DM03', risk:'high', title:'GPS or Location Tracking Devices as a Dignity-Preserving Tool',
+        who:'Families choosing safety technology for a person who is still active and independent',
+        what:'No way to locate a family member quickly if they do leave the home alone',
+        where:'Worn or carried by the person, not just installed in the home',
+        why:'A location device is best framed as a tool for safety and freedom, not surveillance — it can allow someone to keep walking, gardening, or visiting a familiar shop with less restriction, because help can find them quickly if needed.',
+        how:'Choose a small, comfortable device (wearable, shoe insert, or watch-style) introduced early and explained honestly wherever possible: "this helps us find each other if we get separated." Test the device\'s battery life and signal range together as a household.',
+        measurement:'Check battery charge daily if device is not always-worn; confirm location accuracy indoors and outdoors before relying on it.',
+        example:'A tracker in a jacket pocket lets a daughter locate her mother at a nearby park bench within minutes, rather than a prolonged search.',
+        tip:'Introduce tracking early and frame it as mutual reassurance — "so we always know you\'re okay" — rather than waiting until after a frightening incident.' },
+
+      { id:'dm04', num:'DM04', risk:'high', title:'ID Bracelet or Wallet Card with Essential Information',
+        who:'All people living with dementia who leave the home, supervised or not',
+        what:'No easy way for a stranger or professional to identify the person or contact family if they become disoriented away from home',
+        where:'Worn on the wrist, or carried in a pocket or bag',
+        why:'A simple identifier — name, a contact method, and a brief note such as "memory loss — please help me get home" — allows anyone who finds a disoriented person to help quickly and calmly, without the person having to explain a confusing situation themselves.',
+        how:'Use a medical-style ID bracelet or a laminated wallet card with the person\'s name and a contact route (through the personalised cheat sheet in this checklist). Update the card whenever contact details or routines change.',
+        measurement:'Review and refresh ID information at least every season.',
+        example:'A shopkeeper notices an elderly customer seems confused about how to pay. Her ID bracelet lets him call the noted contact, and family arrive within minutes.',
+        tip:'Choose a bracelet style the person finds comfortable and is willing to keep wearing — the best safety tool is the one that stays on.' },
+
+      { id:'dm05', num:'DM05', risk:'medium', title:'Informing Trusted Neighbours and the Local Community',
+        who:'Families in the surrounding neighbourhood or building',
+        what:'Neighbours unaware of the household situation and unable to recognise or respond helpfully if they see the person outside alone and confused',
+        where:'Immediate neighbours, local shopkeepers, and regular community contacts',
+        why:'A neighbourhood that quietly knows to look out for someone is one of the strongest safety nets available, at no cost, and it preserves the person\'s ability to still be seen in their community rather than hidden away.',
+        how:'Have a brief, respectful conversation with close neighbours: share a recent photo, a description of what confusion might look like, and how to reach you. Many communities also have informal or formal vulnerable-persons registers — ask what exists locally.',
+        measurement:'Aim to inform at least the two or three closest neighbouring households, and any shop the person visits often.',
+        example:'A neighbour recognises an elderly man standing confused at the wrong garden gate and walks him home, having met him and his daughter a week earlier.',
+        tip:'Frame the conversation around "helping us keep him safe and independent," not around his diagnosis — dignity and safety work together here.' },
+
+      { id:'dm06', num:'DM06', risk:'high', title:'Secure but Not Locked-In: Door Design That Protects Without Confining',
+        who:'Families balancing exit safety with the person\'s right to move freely within a safe space',
+        what:'Either an unsecured home with real exit risk, or an over-restrictive home that feels like confinement and increases distress',
+        where:'All exterior doors and their immediate surroundings',
+        why:'Complex or hidden locks can occasionally be defeated by long-term habit and muscle memory, while overly obvious barriers can cause frustration, shame, or a sense of imprisonment. The goal is a home that quietly manages risk while still feeling like home.',
+        how:'Use higher or lower auxiliary locks placed outside the usual sightline (rather than large visible padlocks), consider a keyed lock where the person is not expected to exit unsupervised, and always keep an easy, well-marked staff/family exit route in mind for fire safety.',
+        measurement:'Balance check: confirm any added lock does not block emergency egress and is discussed with, not hidden from, the person where they can still understand it.',
+        example:'A family moves the deadbolt to an unusual, low position rather than adding a large visible chain, keeping the door looking ordinary while adding a real pause before it opens.',
+        tip:'Ask "would I feel safe and respected living behind this door?" — safety and dignity should be designed together, not traded off.' },
+
+      { id:'dm07', num:'DM07', risk:'medium', title:'Visual Cues to Reduce Exit-Seeking',
+        who:'Households where a door is a frequent focus of attempted exit',
+        what:'A visually obvious door that draws attention and invites repeated attempts to leave',
+        where:'The most frequently attempted exterior door',
+        why:'Simple visual changes — a curtain or screen over the door, a matching wall-coloured door, or a small "stop" sign at eye level — can reduce the visual pull of an exit without any lock or confrontation at all.',
+        how:'Try covering the door with a curtain on a tension rod, painting or papering it to blend with the surrounding wall, or placing a small, familiar barrier (like a bookcase silhouette sticker) that reduces its visual prominence.',
+        measurement:'Review effectiveness after one to two weeks; adjust the cue if attempts continue.',
+        example:'Hanging a curtain over the back door reduces a father\'s daily attempts to leave from several times a day to almost none.',
+        tip:'Change is often more effective than restriction — reduce the visual invitation rather than adding another lock.' },
+
+      { id:'dm08', num:'DM08', risk:'high', title:'Night-Time Wandering and Bedroom Positioning',
+        who:'Households where wandering occurs mainly overnight',
+        what:'Leaving the bedroom or the home during the night when the household is asleep and less likely to notice quickly',
+        where:'Bedroom, hallway, and route to any exterior door',
+        why:'Night wandering carries added risk because of low light, tiredness in caregivers, and a colder, less supervised environment. Positioning the bedroom closer to a caregiver and lighting the route well reduces both fall and exit risk.',
+        how:'Where possible, place the bedroom near the caregiver\'s room rather than at the far end of the home. Use a motion-sensor night-light along the route to the bathroom and any exterior door, and keep the door alarm from DM01 active every night without exception.',
+        measurement:'Night-light brightness: enough to see the floor clearly without being so bright it disrupts sleep, roughly 5–20 lux along walkways.',
+        example:'Moving a mother\'s bedroom to the room next to her son\'s stops several confused night-time trips to the kitchen from ending in a fall.',
+        tip:'A motion-sensor light that switches on automatically removes the need to find a switch while half-asleep and disoriented.' },
+
+      { id:'dm09', num:'DM09', risk:'medium', title:'Safe Walking Routes and Enclosed Garden Access',
+        who:'People who enjoy walking or being outdoors and benefit from continued movement',
+        what:'No safe outdoor space, leading either to constant supervision indoors or unsupervised walks with real risk',
+        where:'Garden, yard, or a nearby enclosed outdoor area',
+        why:'Restricting all outdoor access can increase distress and exit-seeking, while an enclosed, safe garden allows continued fresh air, movement, and a sense of freedom with much lower risk.',
+        how:'Secure garden gates with a simple latch out of easy sightline, remove trip hazards from paths, and ensure boundary fencing has no gaps a person could slip through. A looped garden path (a path that returns to itself) can support safe, satisfying walking.',
+        measurement:'Boundary check: fence or hedge height and gap size sufficient to prevent easy exit; inspect quarterly.',
+        example:'Adding a looped gravel path around a small garden gives a restless father somewhere safe to walk for twenty minutes at a time, easing his urge to leave the property.',
+        tip:'A secure garden is not a smaller cage — frame and use it as an extension of the home\'s freedom, not a replacement for it.' },
+
+      { id:'dm10', num:'DM10', risk:'medium', title:'Registering with a Local Vulnerable-Persons or Community Safety Scheme',
+        who:'Families wanting an extra layer of support beyond the household',
+        what:'No formal record that would help emergency responders recognise and support the person quickly if found alone and confused',
+        where:'Local community safety, social care, or emergency-service registers where available',
+        why:'Many areas offer a voluntary register or scheme specifically for people who may become confused or disoriented in public — being registered can significantly speed up a safe return if the person is ever found alone.',
+        how:'Ask your local social care team, community policing contact, or memory clinic what schemes exist in your area, and register with a current photo and description. Update the registration yearly or after any significant change.',
+        measurement:'Review registration details at least once a year for accuracy.',
+        example:'A registered profile allows responders to quickly confirm an elderly man\'s identity and contact his family after he is found sitting confused at a bus stop.',
+        tip:'Ask your memory clinic or primary care team directly — they usually know exactly which local schemes exist.' },
+
+      { id:'dm11', num:'DM11', risk:'high', title:'Car Keys and Driving Cessation Safety',
+        who:'Families where the person with dementia previously drove and may still seek out car keys',
+        what:'Continued access to a vehicle after driving is no longer safe, including attempts to drive that go unnoticed',
+        where:'Wherever car keys are normally kept, and the vehicle itself',
+        why:'Driving requires split-second judgement that dementia can impair well before a person recognises the change themselves. An unnoticed drive is a serious risk to the person and to others on the road.',
+        how:'Have keys held by another family member or kept out of sight and reach rather than in a visible bowl by the door. If keys are a source of comfort, a spare or deactivated key can sometimes be kept for reassurance. Discuss driving cessation early and honestly, with support from a doctor if it helps the conversation.',
+        measurement:'Confirm no functioning key remains accessible in a habitual location; check monthly.',
+        example:'Moving car keys to a drawer in another room, after several near-miss attempts to "run an errand," removes the daily temptation without a confrontation.',
+        tip:'A doctor\'s letter recommending driving cessation can sometimes be easier for a person to accept than a family member\'s request alone.' },
+
+      { id:'dm12', num:'DM12', risk:'medium', title:'A Recent Photo Kept Current for Identification',
+        who:'Anyone who may need to help locate the person quickly',
+        what:'An outdated photo that no longer matches current appearance, hairstyle, or typical clothing',
+        where:'Saved on a phone, printed at home, and included on the personalised cheat sheet',
+        why:'A recent, clear photo is one of the fastest ways to help neighbours, shopkeepers, or responders recognise someone quickly if they become separated from home.',
+        how:'Take a simple, well-lit photo every season showing the person\'s current appearance. Keep a copy on the phone of every close family member and on the printed cheat sheet.',
+        measurement:'Refresh the photo at least every season, or sooner after any noticeable change in appearance.',
+        example:'An up-to-date photo, shared quickly with a search party, helps neighbours recognise a missing grandmother within the first ten minutes rather than after an hour.',
+        tip:'Keep the photo un-posed and natural — it should show how the person actually looks day to day, not a special-occasion version.' },
+
+      { id:'dm13', num:'DM13', risk:'low', title:'Weather-Appropriate Clothing Accessible Near Exits',
+        who:'Anyone at risk of leaving the home without dressing for the weather',
+        what:'Stepping outside in inappropriate clothing during cold, wet, or very hot conditions, increasing risk if the person is out longer than intended',
+        where:'Near the main exit used by the person',
+        why:'A short, unplanned trip outside can turn into a genuine health risk in cold or hot weather if the person is not dressed for it and is delayed in getting back inside.',
+        how:'Keep a coat, warm layer, sun hat, or appropriate footwear near the most-used door, rotated by season. Encourage a simple habit of grabbing it, and store spares in a car or bag for unplanned outings.',
+        measurement:'Seasonal check: outdoor temperature comfort range roughly 18–24°C (64–75°F) indoors; dress for conditions outside this range.',
+        example:'A coat hook by the back door means a mother heading outside for a "quick look at the garden" in cool weather is warmly dressed rather than caught out in a thin cardigan.',
+        tip:'Keep it simple — one coat, one pair of shoes, always in the same spot, so it becomes an easy habit rather than a decision.' },
+
+      { id:'dm14', num:'DM14', risk:'medium', title:'A Family Emergency Plan If Someone Goes Missing',
+        who:'The whole care network — family, neighbours, and any paid carers',
+        what:'No clear, calm plan for what to do in the first minutes if the person cannot be found',
+        where:'Written down and accessible to everyone involved in care',
+        why:'The first few minutes after noticing someone is missing matter most. A clear, rehearsed plan reduces panic and speeds up a safe, calm return far more than an improvised response.',
+        how:'Write a short plan: check likely nearby places first (garden, favourite bench, old workplace, former home), notify neighbours who know the situation, contact whoever holds the GPS tracker app, and know when to contact local authorities. Keep this plan with the personalised cheat sheet.',
+        measurement:'Aim to complete the "likely places" check within the first 10 minutes before widening the search.',
+        example:'Following the written plan, a son checks the nearby park bench his mother often visits first and finds her there within minutes, rather than searching randomly.',
+        tip:'Rehearse the plan once as a household, calmly, before it is ever needed — panic is quieter when everyone already knows their part.' }
+    ]
+  },
+  {
+    id: 2, name: 'Kitchen & Fire Safety', icon: '🔥',
+    desc: '14 checks covering stove and oven shut-off, smoke alarms, matches and candles, appliance safety and shared meal preparation.',
+    checks: [
+      { id:'dm15', num:'DM15', risk:'critical', title:'Stove and Oven Automatic Shut-Off or Isolation Devices',
+        who:'Households where the person with dementia may still attempt to cook unsupervised',
+        what:'A stove or oven left on, unattended, or turned on without an intention to cook',
+        where:'Kitchen cooker and hob',
+        why:'Forgetting a lit burner is one of the most common and serious fire risks in home dementia care, because the person may no longer reliably remember that it was switched on.',
+        how:'Fit a certified automatic shut-off device or an isolation switch that a caregiver controls, or use a stove-top timer that cuts power after a set period. Where independent cooking is no longer safe, consider a hidden isolation switch rather than removing the cooker\'s appearance entirely.',
+        measurement:'Auto shut-off timers commonly set to cut power after 20–30 minutes of unattended operation — adjust to typical cooking needs.',
+        example:'An isolation switch hidden behind a cupboard panel lets a daughter safely turn the stove on only when she is present, without her father noticing a change to his kitchen.',
+        tip:'Introduce any shut-off device quietly and without announcement where possible — the goal is safety, not a visible loss of independence.' },
+
+      { id:'dm16', num:'DM16', risk:'high', title:'Recognising When Independent Cooking Becomes Unsafe',
+        who:'Families monitoring a gradual change in cooking ability',
+        what:'Signs such as burnt pans, forgotten ingredients, confusion about meal times, or repeated near-misses that signal cooking alone is no longer safe',
+        where:'Kitchen, observed over time',
+        why:'The shift from safe to unsafe independent cooking is often gradual. Noticing early signs allows a calm transition to supported cooking, rather than waiting for a serious incident to force the change.',
+        how:'Keep a simple log of any near-misses (forgotten pans, wrong ingredients, confusion about whether a meal was eaten). Discuss changes gently, and offer shared cooking or simplified meal options as an appealing alternative rather than a restriction.',
+        measurement:'Review the log every few weeks; two or more near-misses in a short period is a signal to increase supervision.',
+        example:'After noticing scorched pans twice in one week, a family begins cooking dinner together each evening — framed as quality time rather than a takeover.',
+        tip:'Offer companionship in the kitchen before removing independence from it — most people accept help framed as togetherness far more easily.' },
+
+      { id:'dm17', num:'DM17', risk:'critical', title:'Smoke Alarm Testing and Placement',
+        who:'Every household, with particular importance where cooking risk is elevated',
+        what:'A missing, faulty, or untested smoke alarm that fails to give an early warning of fire',
+        where:'Kitchen, hallway outside bedrooms, and any room with a heat source',
+        why:'Smoke alarms remain the single most effective early-warning tool against house fires. Alarms meeting recognised standards such as EN 14604 are tested for reliable sound output and sensitivity.',
+        how:'Fit smoke alarms meeting EN 14604 (or an equivalent recognised standard) in the kitchen, hallways, and near bedrooms. Test alarms monthly using the test button, and replace batteries or units on the schedule the manufacturer specifies.',
+        measurement:'EN 14604 smoke alarms; test monthly; replace standard alkaline batteries at least yearly, and replace the full alarm unit roughly every 10 years.',
+        example:'A monthly test reveals a kitchen alarm battery has failed — replacing it immediately restores protection before it is ever needed in an emergency.',
+        tip:'Put "test the alarms" on the same day each month as another regular household task, so it never gets forgotten.' },
+
+      { id:'dm18', num:'DM18', risk:'high', title:'Matches, Lighters and Candles Secured',
+        who:'Households where the person may no longer safely judge fire risk',
+        what:'Open access to matches, lighters, or lit candles that could start an unintended fire',
+        where:'Kitchen drawers, mantelpieces, and any room where candles are traditionally used',
+        why:'Confusion about cause and effect can mean a lit candle or match is left unattended, or a flame source is used without full awareness of the risk.',
+        how:'Store matches and lighters in a secured drawer or cupboard, and replace open-flame candles with flameless LED versions where the ritual or comfort of a candle still matters.',
+        measurement:'Check storage weekly if candles or matches are used regularly in the home.',
+        example:'Switching to a flameless LED candle for evening routine keeps the calming ritual without the fire risk of an open flame.',
+        tip:'A flameless candle can look and feel remarkably similar — most people don\'t notice, or don\'t mind, the swap.' },
+
+      { id:'dm19', num:'DM19', risk:'medium', title:'Kettle and Small Appliance Auto Shut-Off',
+        who:'Households where hot-water appliances are used daily',
+        what:'A kettle or small appliance left running or boiling dry unattended',
+        where:'Kitchen countertop',
+        why:'Kettles and similar appliances are used frequently and can be forgotten mid-use, risking scalds, burns, or a fire from boiling dry.',
+        how:'Choose a kettle with automatic shut-off and boil-dry protection as standard, and consider a countertop timer or smart plug that cuts power to small appliances after a set period of use.',
+        measurement:'Auto shut-off kettles switch off within seconds of reaching boiling point or of running dry — confirm this feature before purchase if replacing an older kettle.',
+        example:'An auto-shutoff kettle prevents a near-miss when a forgotten kettle would otherwise have boiled dry on an older stovetop-style unit.',
+        tip:'Replace any older kettle without auto shut-off first — it is a low-cost, high-value safety upgrade.' },
+
+      { id:'dm20', num:'DM20', risk:'high', title:'Fire Extinguisher or Fire Blanket in the Kitchen',
+        who:'Every household, but especially where cooking-related risk is elevated',
+        what:'No quick way to control a small kitchen fire before it spreads',
+        where:'Mounted near the kitchen exit, not directly above the cooker',
+        why:'A fire blanket or small extinguisher can safely smother a contained pan fire in seconds, often preventing the need to evacuate at all — but only if it is close at hand and every caregiver knows how to use it.',
+        how:'Mount a fire blanket or a small kitchen-rated extinguisher near the kitchen door (not above the stove, where reaching it during a fire is dangerous). Make sure every caregiver, including any respite or paid carer, knows its location and basic use.',
+        measurement:'Check extinguisher pressure gauge and fire blanket condition every few months; replace per manufacturer guidance.',
+        example:'A fire blanket smothers a small pan fire within seconds, preventing it from spreading to nearby cupboards.',
+        tip:'Never use water on a hot-oil pan fire — a fire blanket or extinguisher rated for kitchen fires is essential, and this should be shown to every carer once.' },
+
+      { id:'dm21', num:'DM21', risk:'medium', title:'Simplifying Appliance Controls',
+        who:'Households adapting the kitchen to remain usable and understandable',
+        what:'Multiple unlabelled dials and buttons that are confusing and may be operated incorrectly',
+        where:'Cooker, microwave, and any frequently used appliance',
+        why:'Simplified, clearly labelled controls reduce both the risk of an appliance being used unsafely and the frustration of not understanding a once-familiar device.',
+        how:'Use bold colour-coded stickers or large-print labels on the controls actually needed day to day, and consider covering or removing rarely used functions to reduce visual clutter and confusion.',
+        measurement:'Review labelling effectiveness after two weeks; adjust wording or colour if confusion continues.',
+        example:'A single red sticker marking "off" on the microwave dial reduces a mother\'s hesitation and confusion each time she reheats her tea.',
+        tip:'Simplify one appliance at a time and watch how it\'s used before changing the next — small, tested changes work better than a full kitchen overhaul at once.' },
+
+      { id:'dm22', num:'DM22', risk:'low', title:'Timers and Reminders for Unattended Cooking',
+        who:'Anyone still cooking independently, even with support',
+        what:'Forgetting that something is cooking, leading to burning or a fire risk',
+        where:'Kitchen, wherever cooking takes place',
+        why:'A visible or audible timer offers a simple external memory aid that does not rely on the person remembering unaided, supporting continued independent cooking for longer, more safely.',
+        how:'Use a simple, loud kitchen timer or a smart speaker reminder set at the start of cooking. Pair it with a visual cue, such as a placed object by the door, as a backup reminder.',
+        measurement:'Set timers to match typical dish cooking times, and check in if a timer runs a set period (for example 15 minutes) past its alert without a response.',
+        example:'A loud mechanical timer reminds a father to check his soup, preventing a repeat of an earlier scorched-pan incident.',
+        tip:'A simple twist-dial timer is often easier to understand than a digital one — choose the tool that matches the person\'s current abilities.' },
+
+      { id:'dm23', num:'DM23', risk:'high', title:'Hot Surface Awareness',
+        who:'People whose sense of heat or pain perception may have changed',
+        what:'Reduced awareness of hot hobs, irons, or kettles leading to accidental burns',
+        where:'Kitchen hob, iron, and any hot-surface appliance',
+        why:'Dementia can affect the ability to recognise or respond quickly to a hot surface, increasing burn risk even from appliances that were once used safely for decades.',
+        how:'Use induction hobs where practical, as the surface itself stays cooler; add hob guards or surface indicator lights that show clearly when something is hot; store the iron unplugged and out of reach when not directly supervised.',
+        measurement:'Scald risk from hot liquids remains significant above roughly 60°C (140°F) on skin contact for more than a few seconds — treat any hot-surface appliance with this in mind.',
+        example:'A colour-changing hob indicator light helps a caregiver notice at a glance that the hob is still hot after cooking, even once the flame or element is off.',
+        tip:'If replacing a hob, an induction model is one of the highest-impact single safety upgrades available for this risk.' },
+
+      { id:'dm24', num:'DM24', risk:'medium', title:'Escape Plan Rehearsed and Accessible',
+        who:'The whole household, including any regular carers',
+        what:'No practised plan for leaving the home quickly and safely in a fire',
+        where:'Whole home, with particular attention to the person\'s bedroom and any mobility needs',
+        why:'A person with dementia may not respond to an alarm the way they once would, and may need direct guidance rather than independent action during an emergency. Planning for this in advance saves critical time.',
+        how:'Write a simple, step-by-step escape plan accounting for any mobility aids or confusion, identify a clear route and a meeting point outside, and review it with every regular caregiver. Keep the plan with the personalised cheat sheet.',
+        measurement:'Review and, where possible, walk through the escape plan at least twice a year.',
+        example:'A written plan noting "guide by the hand, do not expect independent action" helps a substitute carer respond correctly during a real smoke-alarm test.',
+        tip:'Assume during any real emergency that verbal instructions alone may not be followed — plan for physical guidance from the outset.' },
+
+      { id:'dm25', num:'DM25', risk:'medium', title:'Reducing Clutter Near Heat Sources',
+        who:'Households where paper, cloths, or packaging accumulate near the cooker',
+        what:'Flammable material such as tea towels, paper towels, or packaging stored or left too close to a heat source',
+        where:'Around the cooker, oven, and toaster',
+        why:'Clutter near a heat source is a common, easily preventable contributor to kitchen fires, and is worth checking specifically because habits around storage can drift over time.',
+        how:'Keep a clear zone of at least 30cm (12 in) around any hob, toaster, or heat source, and store tea towels, oven gloves, and paper products in a drawer rather than draped nearby.',
+        measurement:'Clearance zone: minimum 30cm (12 in) around active heat sources, kept free of flammable material.',
+        example:'Moving a stack of paper napkins away from the toaster removes a fire risk that had gone unnoticed for months.',
+        tip:'Do a five-minute "clear the counter" check once a week — it\'s a fast habit that closes a real gap.' },
+
+      { id:'dm26', num:'DM26', risk:'high', title:'Gas Supply Shut-Off Knowledge',
+        who:'Every caregiver in a home with a gas cooker or gas heating',
+        what:'Not knowing how to shut off the gas supply quickly in an emergency, such as a smell of gas or a fire',
+        where:'Main gas shut-off valve, usually near the meter or supply entry point',
+        why:'Knowing the exact location and operation of the gas shut-off valve can prevent a dangerous situation from escalating, and every regular caregiver — including respite or paid carers — should know it, not just the primary family member.',
+        how:'Locate and clearly label the main gas shut-off valve. Show every regular caregiver exactly how to turn it off, and keep a torch nearby in case of a power cut during an emergency.',
+        measurement:'Confirm valve location and operation is known to at least two household members at all times.',
+        example:'A visiting relative safely shuts off the gas supply after smelling gas, because the valve had been clearly labelled and shown to her in advance.',
+        tip:'Attach a simple laminated instruction card directly to the valve — clear, calm instructions in the moment matter more than memory.' },
+
+      { id:'dm27', num:'DM27', risk:'low', title:'Oven Gloves and Long-Handled Tools Positioned Safely',
+        who:'Anyone still handling hot cookware, with or without supervision',
+        what:'Reaching over a hot hob or using ill-fitting gloves, increasing burn risk',
+        where:'Kitchen, near the cooker',
+        why:'Well-fitted oven gloves and long-handled utensils reduce the distance hands need to be near a heat source, lowering burn risk for both the person with dementia and their caregiver.',
+        how:'Keep oven gloves in the same easy-to-reach spot every time, choose gloves that fit securely and don\'t slip, and prefer longer-handled spoons and tongs for stovetop cooking.',
+        measurement:'Replace gloves showing any wear, thinning, or scorch damage immediately.',
+        example:'A long-handled spoon reduces the number of times a mother\'s hand passes close to a hot pan while stirring.',
+        tip:'Keep gloves on a visible hook rather than in a drawer — visibility encourages consistent use.' },
+
+      { id:'dm28', num:'DM28', risk:'medium', title:'Shared Meal Preparation as Connection, Not Just Supervision',
+        who:'Families looking for ways to stay engaged together safely',
+        what:'Framing kitchen changes purely as restriction, missing an opportunity for shared time and continued purpose',
+        where:'Kitchen, at meal times',
+        why:'Cooking together — even simple tasks like stirring, washing vegetables, or setting the table — preserves a sense of purpose and connection, while naturally keeping the person safely supervised during the highest-risk kitchen moments.',
+        how:'Involve the person in simple, safe steps of meal preparation that match their current ability, rather than removing them from the kitchen entirely. Celebrate participation rather than correcting technique.',
+        measurement:'No numeric standard — success is measured by continued willing participation and enjoyment, reviewed informally over time.',
+        example:'Washing vegetables at the sink becomes a daily shared ritual that a father looks forward to, rather than a supervised safety task.',
+        tip:'The goal in the kitchen is never just prevention — look for the version of "helping" that still feels good to do.' }
+    ]
+  },
+  {
+    id: 3, name: 'Medication & Chemical Safety', icon: '💊',
+    desc: '14 checks covering locked medication storage, dosette boxes, poison awareness, cleaning-product storage and safe disposal.',
+    checks: [
+      { id:'dm29', num:'DM29', risk:'critical', title:'Locked or Secured Medication Storage',
+        who:'Every household managing prescription or over-the-counter medication for a person with dementia',
+        what:'Medication left accessible on a countertop or in an unlocked cabinet, risking accidental overdose or missed understanding of what has already been taken',
+        where:'Kitchen, bathroom, and bedside storage',
+        why:'The WHO Medication Without Harm initiative highlights medication errors as a leading avoidable cause of harm — for a person with memory loss, easy access to a full supply removes an important safety barrier.',
+        how:'Store all medication in a locked box or cabinet, with only the caregiver holding the key or code. Keep a single, current list of what is prescribed, reviewed against what is actually in storage.',
+        measurement:'Recognised guidance: store medication out of reach and, where confusion is present, under lock — review supply against prescription monthly.',
+        example:'Moving medication into a small locked box on top of the fridge ends a pattern of a father taking extra tablets because he forgot his morning dose.',
+        tip:'Choose a lock that is quick for the caregiver to operate one-handed — friction leads to shortcuts that undo the safety benefit.' },
+
+      { id:'dm30', num:'DM30', risk:'high', title:'Dosette or Pill Organiser Boxes for Daily Doses',
+        who:'Anyone managing multiple daily medications',
+        what:'Confusion about whether a dose has been taken, leading to missed doses or accidental double-dosing',
+        where:'Wherever medication is administered, typically kitchen or bedroom',
+        why:'A dosette box, pre-filled by day and time, gives both the person and caregiver a clear visual record of what has and has not been taken, reducing one of the most common medication safety risks in dementia care.',
+        how:'Use a labelled, day-and-time dosette box, filled weekly by the caregiver or a pharmacist. Check it at each dose time and note any discrepancy immediately.',
+        measurement:'Refill and check dosette accuracy weekly; confirm with prescription list each time.',
+        example:'A weekly-filled dosette box makes it immediately obvious that the Tuesday evening compartment was missed, prompting a same-day catch-up conversation with the prescriber.',
+        tip:'Ask a pharmacist about pre-filled dosette or blister-pack services — many will prepare these for you as part of routine prescription management.' },
+
+      { id:'dm31', num:'DM31', risk:'critical', title:'Preventing Double-Dosing and Missed Doses',
+        who:'Households where the person may still attempt to self-medicate',
+        what:'Taking a dose twice because an earlier dose is forgotten, or skipping a dose because it feels unfamiliar',
+        where:'Wherever medication is stored and taken',
+        why:'Both double-dosing and missed doses can have serious consequences depending on the medication involved, and memory loss removes the person\'s own ability to reliably self-check.',
+        how:'Pair every dose with a simple external check: a dosette box (DM30), a paper log, or a caregiver present at dose times. Avoid relying on the person\'s own memory of having taken a dose as the only safeguard.',
+        measurement:'No dose should rely on unaided recall alone — cross-check against the dosette or written log every time.',
+        example:'A simple tick-box chart on the fridge prevents a mother from taking her blood pressure tablet twice after forgetting she\'d already had it that morning.',
+        tip:'If in doubt whether a dose was taken, contact a pharmacist or prescriber for guidance rather than guessing either way.' },
+
+      { id:'dm32', num:'DM32', risk:'high', title:'Poison Control Awareness and Quick-Access Information',
+        who:'Every caregiver in the household',
+        what:'Not knowing where to get fast, accurate guidance if a medication or household chemical is accidentally ingested',
+        where:'Kept with the personalised cheat sheet, accessible in an emergency',
+        why:'Quick access to a poison information or toxicology service can be the difference between an unnecessary emergency room visit and confident at-home guidance, or between delay and rapid appropriate treatment in a genuine emergency.',
+        how:'Add your local poison control or toxicology information service to the personalised cheat sheet contacts in this checklist so it is instantly available. Know what information they will ask for: what was taken, how much, and when.',
+        measurement:'Confirm the poison information contact is filled in on the cheat sheet before it is needed — check it during setup.',
+        example:'Having the poison information contact already saved means a caregiver gets clear guidance within minutes after a mix-up with a look-alike tablet bottle.',
+        tip:'Route all emergency numbers through the personalised cheat sheet in this checklist so they are always current on this device.' },
+
+      { id:'dm33', num:'DM33', risk:'high', title:'Cleaning Products Stored Separately from Food and Medication Look-Alikes',
+        who:'Households where cleaning products may be mistaken for food, drink, or medication',
+        what:'Cleaning products stored in containers or locations that resemble food or drink, or medication stored near cleaning products',
+        where:'Kitchen cupboards, under-sink storage, bathroom cabinets',
+        why:'Confusion between substances is a recognised risk factor in dementia care, particularly if a cleaning product has been decanted into a drink bottle or stored near food items.',
+        how:'Keep all cleaning and chemical products in their original, clearly labelled containers, stored well away from food, drink, and medication — ideally in a separate, secured cupboard entirely.',
+        measurement:'Never decant cleaning products into food or drink containers; store at least one full cupboard apart from any food item.',
+        example:'Moving dishwasher tablets from a low, food-adjacent cupboard to a locked utility cabinet removes a look-alike risk that had gone unnoticed.',
+        tip:'Walk through the kitchen and bathroom specifically looking for anything that could be mistaken for food or a drink — it\'s a different lens than a typical tidy-up.' },
+
+      { id:'dm34', num:'DM34', risk:'medium', title:'Reviewing Medications Regularly with a Prescriber',
+        who:'Families managing an evolving medication list over time',
+        what:'An outdated medication list that no longer reflects current prescriptions, doses, or interactions',
+        where:'Reviewed with a doctor, pharmacist, or dementia care specialist',
+        why:'Medication needs often change as dementia progresses, and a regular review helps catch interactions, duplications, or medications that may no longer be needed or appropriate.',
+        how:'Schedule a medication review with the prescribing doctor or a pharmacist at least once or twice a year, or sooner after any significant health change, and bring the current dosette or medication list to every appointment.',
+        measurement:'Recognised guidance: review regularly, at minimum annually, or after any hospital stay or major health change.',
+        example:'A routine review identifies two medications with an overlapping effect, and the prescriber safely simplifies the regimen.',
+        tip:'Keep the current medication list on the personalised cheat sheet so it is always ready to bring to an appointment.' },
+
+      { id:'dm35', num:'DM35', risk:'medium', title:'Recognising Medication Refusal Without Confrontation',
+        who:'Caregivers supporting someone who sometimes resists taking medication',
+        what:'A person refusing medication, sometimes due to confusion, taste, or a forgotten reason for taking it',
+        where:'Wherever medication is normally given',
+        why:'Confrontation over medication often increases distress and resistance, while a calm, flexible approach preserves dignity and often succeeds where insistence does not.',
+        how:'Try offering medication with a preferred food or drink where medically appropriate (confirm with a pharmacist first), choose a calm, unhurried moment, and avoid arguing about why it is needed in the moment — revisit gently later if needed.',
+        measurement:'No numeric standard — always confirm with a pharmacist before mixing any medication with food or drink, as some interactions affect absorption.',
+        example:'Offering a tablet with a spoonful of yoghurt, after checking with the pharmacist it was safe to do so, resolves a daily refusal that direct insistence had never solved.',
+        tip:'If refusal becomes frequent, discuss simplified formulations (such as liquid or patch alternatives) with the prescriber rather than relying on persuasion alone.' },
+
+      { id:'dm36', num:'DM36', risk:'low', title:'Labelling Medications Clearly',
+        who:'Anyone with reduced reading ability or visual clarity due to dementia',
+        what:'Small print or unclear labelling that makes it hard to identify the right medication at the right time',
+        where:'On medication packaging and the dosette box',
+        why:'Clear, large-print, and symbol-based labelling reduces the chance of confusion or error, supporting continued participation in the person\'s own care where appropriate.',
+        how:'Use large-print labels or simple colour-coded stickers on dosette compartments (for example, a sun symbol for morning, a moon for night), and ask the pharmacist whether large-print labelling is available for prescriptions.',
+        measurement:'No numeric standard — labelling should be legible from a comfortable reading distance without needing to search for information.',
+        example:'A yellow sun sticker on the morning compartment helps a father find his own tablets confidently each day.',
+        tip:'Ask your pharmacist directly — many can already provide large-print labels on request at no extra cost.' },
+
+      { id:'dm37', num:'DM37', risk:'high', title:'Alcohol and Medication Interaction Awareness',
+        who:'Households where alcohol is still consumed alongside prescribed medication',
+        what:'Alcohol combined with medications that carry interaction risks, potentially worsening confusion, sedation, or other side effects',
+        where:'Wherever alcohol is stored or consumed in the home',
+        why:'Certain medications commonly used in dementia care carry specific interaction risks with alcohol, and reduced awareness of quantity consumed can compound the risk.',
+        how:'Ask the prescriber or pharmacist specifically about interactions for every medication the person takes, and store any alcohol securely if consumption needs to be limited or supervised.',
+        measurement:'Confirm interaction guidance for each medication individually with a pharmacist — general rules do not apply equally to every drug.',
+        example:'A pharmacist flags a significant interaction between a sedative medication and wine, prompting the family to remove alcohol from easy reach.',
+        tip:'This is worth asking about directly and specifically at every medication review, not assuming it was covered previously.' },
+
+      { id:'dm38', num:'DM38', risk:'medium', title:'Safe Disposal of Unused or Expired Medication',
+        who:'Households accumulating old or discontinued medications over time',
+        what:'Expired or discontinued medication left in the home, increasing confusion about what is currently prescribed and the risk of accidental use',
+        where:'Medication storage areas',
+        why:'Old medication left in circulation increases the chance of confusion between current and discontinued treatments, and safe disposal reduces this risk as well as environmental harm.',
+        how:'Return unused or expired medication to a pharmacy for safe disposal rather than placing it in household waste or flushing it, and do this promptly whenever a prescription changes.',
+        measurement:'Review and clear out expired or discontinued medication at least every season.',
+        example:'Returning three discontinued medications to the pharmacy removes any chance they could be confused with the current prescription list.',
+        tip:'Do this clear-out at the same time as each medication review (DM34) so it becomes a routine habit.' },
+
+      { id:'dm39', num:'DM39', risk:'medium', title:'Vitamin and Supplement Storage',
+        who:'Households where vitamins or supplements are taken alongside prescribed medication',
+        what:'Vitamins or supplements that resemble sweets in colour or shape, increasing the risk of accidental over-consumption',
+        where:'Wherever supplements are stored, often alongside food',
+        why:'Colourful, sweet-like vitamins can be mistaken for treats, particularly gummy or chewable formulations, and should be stored with the same care as any other medication.',
+        how:'Store vitamins and supplements in the same locked area as other medication rather than in an open kitchen cupboard, and check with a pharmacist for any interaction with prescribed medication.',
+        measurement:'Treat all supplements with the same storage standard as prescription medication — locked and out of casual reach.',
+        example:'Moving a bottle of gummy vitamins from the fruit bowl to the locked medication box prevents them being mistaken for sweets.',
+        tip:'If a supplement looks like a sweet, store it like a medication, not like a snack.' },
+
+      { id:'dm40', num:'DM40', risk:'low', title:'Keeping a Current Medication List for Emergencies',
+        who:'Anyone who might need to respond to a medical emergency involving the person',
+        what:'No accessible, up-to-date list of current medications for use by emergency responders or a substitute caregiver',
+        where:'On the personalised cheat sheet, and ideally also in a wallet or bag',
+        why:'In an emergency, responders need to know current medications quickly and accurately to provide safe treatment, and a substitute caregiver needs the same information to avoid errors.',
+        how:'Keep an up-to-date list of medication names, doses, and timing on the personalised cheat sheet in this checklist, and update it every time a prescription changes.',
+        measurement:'Update the medication list within a day of any prescription change.',
+        example:'A visiting paramedic is able to check quickly for interactions because the current medication list was immediately available on the cheat sheet.',
+        tip:'Treat the medication list as a living document — update it the moment anything changes, not at the next scheduled review.' },
+
+      { id:'dm41', num:'DM41', risk:'high', title:'Garden and Garage Chemical and Pesticide Storage',
+        who:'Households with a garden, garage, or shed containing chemical products',
+        what:'Pesticides, fuel, or garden chemicals stored within reach and without the same safeguards applied to household products',
+        where:'Garage, shed, and garden storage areas',
+        why:'Garden and garage chemicals are often overlooked compared with kitchen and bathroom products, but carry similar or greater risk if a person with dementia comes across them while exploring these spaces.',
+        how:'Apply the same locked-storage standard used indoors to any shed, garage, or garden chemical storage, and consider whether these spaces need their own door alarm or lock if the person spends time there unsupervised.',
+        measurement:'Extend the household\'s locked-storage standard to every chemical-containing space on the property, not just the kitchen and bathroom.',
+        example:'Locking the garden shed after finding it unlocked prevents access to a weed killer that had been stored there for years without incident.',
+        tip:'Walk the full property, not just the interior, when doing a chemical-safety check — outbuildings are easy to overlook.' },
+
+      { id:'dm42', num:'DM42', risk:'medium', title:'Batteries and Small Hazardous Items Secured',
+        who:'Households with small button batteries, cleaning capsules, or similar compact hazardous items',
+        what:'Small items such as button batteries or liquid detergent capsules left within reach, posing a swallowing or chemical burn risk',
+        where:'Remote controls, small electronics, and laundry areas',
+        why:'Small hazardous items are easy to overlook because they are not obviously dangerous in appearance, but can cause serious harm if swallowed or handled without awareness of the risk.',
+        how:'Store spare button batteries in a locked drawer, use battery compartments with a screw closure where possible, and keep laundry or dishwasher capsules in their original container inside a secured cupboard rather than a loose bowl.',
+        measurement:'A swallowed button battery can cause serious injury within hours — treat this as a same-day, not "when convenient," storage fix.',
+        example:'Moving spare batteries for the television remote into a locked drawer removes a risk that had not been considered during the initial kitchen and bathroom safety check.',
+        tip:'Think beyond the kitchen and bathroom — small hazardous items are often found in living rooms, home offices, and laundry areas.' }
+    ]
+  },
+  {
+    id: 4, name: 'Falls, Mobility & Home Layout', icon: '🚶',
+    desc: '14 checks covering lighting, decluttered pathways, flooring, bathroom grab bars, stair safety and safe mobility aids.',
+    checks: [
+      { id:'dm43', num:'DM43', risk:'critical', title:'Lighting Levels Throughout the Home',
+        who:'Every household supporting a person at increased fall risk',
+        what:'Dim, uneven, or hard-to-reach lighting that makes it difficult to see hazards clearly',
+        where:'Hallways, stairs, bathrooms, and bedrooms especially',
+        why:'The WHO Global report on falls prevention in older age identifies poor lighting as a significant, modifiable fall-risk factor, and reduced contrast sensitivity is common in dementia, making good lighting even more important.',
+        how:'Increase wattage or switch to brighter LED bulbs in hallways, stairs, and bathrooms; add night-lights along routes used after dark; ensure light switches are easy to find, ideally with a glow-in-the-dark or illuminated surround.',
+        measurement:'Recognised falls-prevention guidance: aim for even, glare-free lighting throughout walked routes, with additional night lighting of roughly 5–20 lux along overnight paths.',
+        example:'Replacing a dim hallway bulb with a brighter LED equivalent immediately reduces a mother\'s hesitation and shuffling in that corridor at dusk.',
+        tip:'Walk the home yourself at dusk and at night to spot the dim spots you\'d otherwise miss during a daytime check.' },
+
+      { id:'dm44', num:'DM44', risk:'high', title:'Decluttering Walking Pathways',
+        who:'Anyone with reduced mobility, balance, or spatial awareness',
+        what:'Furniture, cables, or objects narrowing or obstructing the paths most often walked in the home',
+        where:'Hallways, living areas, and routes between bedroom, bathroom, and kitchen',
+        why:'A cluttered pathway increases trip risk substantially, and dementia can reduce the ability to notice and safely navigate around an unexpected obstacle.',
+        how:'Widen and clear the most-used walking routes, removing low furniture, floor lamps, and loose objects from the direct path. Keep frequently used items within easy reach rather than requiring a detour to retrieve them.',
+        measurement:'Aim for a clear walking path at least 90cm (35 in) wide along all frequently used routes.',
+        example:'Removing a low side table from the hallway corner eliminates a repeated near-trip spot that had gone unnoticed for months.',
+        tip:'Get down to eye level occasionally and look at the room from a lower vantage point — obstacles are easier to spot from this angle.' },
+
+      { id:'dm45', num:'DM45', risk:'critical', title:'Removing or Securing Loose Rugs and Mats',
+        who:'Every household with rugs, mats, or loose flooring transitions',
+        what:'Rugs or mats that slip, bunch, or create a trip edge underfoot',
+        where:'Hallways, doorways, bathroom entrances, and living areas',
+        why:'Loose rugs are one of the most common and easily fixed fall hazards identified in falls-prevention guidance, and the risk increases further where balance or gait has already been affected by dementia.',
+        how:'Remove rugs and mats where possible, especially in hallways and doorways; where a rug must stay, secure it fully to the floor with non-slip underlay or double-sided tape along every edge.',
+        measurement:'Any rug edge that lifts more than a few millimetres underfoot should be secured or removed.',
+        example:'Removing a bunched hallway runner eliminates the exact spot where a father had stumbled twice in the previous month.',
+        tip:'If in doubt, remove rather than secure — a bare, even floor is nearly always the safer choice in high-traffic areas.' },
+
+      { id:'dm46', num:'DM46', risk:'critical', title:'Bathroom Grab Bars and Non-Slip Surfaces',
+        who:'Anyone using the bathroom or shower independently or with support',
+        what:'A wet, slippery bathroom without secure handholds during transfers in and out of the bath or shower',
+        where:'Bath, shower, and toilet area',
+        why:'The bathroom is one of the highest-risk rooms for falls in any home, and secure grab bars combined with non-slip surfaces substantially reduce this risk during the moments of transfer that are hardest to balance through.',
+        how:'Install securely wall-fixed grab bars (not suction-mounted) beside the toilet and within the bath or shower, and add a non-slip mat or textured surface in the bath, shower floor, and immediately outside it.',
+        measurement:'Grab bars should be fixed into wall studs or with appropriate anchors to support a full body-weight load; test bar security every few months.',
+        example:'A wall-mounted grab bar beside the bath gives a mother a secure, stable handhold during the moment of stepping in, where she had previously reached for a towel rail that was never designed to bear weight.',
+        tip:'Never rely on a towel rail or soap dish as a grab point — they are not built to bear weight and are a common cause of falls when used this way.' },
+
+      { id:'dm47', num:'DM47', risk:'high', title:'Stair Safety',
+        who:'Anyone using stairs, with or without supervision',
+        what:'Stairs without secure handrails, adequate lighting, or visual contrast between steps',
+        where:'All staircases in the home',
+        why:'Reduced depth perception and contrast sensitivity, both common in dementia, can make it harder to judge step edges accurately, increasing fall risk on stairs specifically.',
+        how:'Fit secure handrails on both sides of the staircase where possible, ensure even, bright lighting on every step, and add contrasting-colour strips to the edge of each step to make them easier to distinguish.',
+        measurement:'Recognised falls-prevention guidance: handrails on both sides where feasible, and clear visual contrast of at least one full tone between the step edge and the tread.',
+        example:'Adding a bright contrast strip to each stair edge noticeably reduces hesitant, uncertain steps going both up and down.',
+        tip:'If stairs become consistently difficult despite these changes, discuss with an occupational therapist whether a stairlift or single-level living arrangement should be considered.' },
+
+      { id:'dm48', num:'DM48', risk:'medium', title:'Footwear Choice',
+        who:'Anyone walking independently around the home',
+        what:'Loose slippers, socks alone, or worn-out shoe soles that reduce grip and stability',
+        where:'Worn throughout the home and outdoors',
+        why:'Supportive, well-fitting, non-slip footwear is a simple and effective falls-prevention measure recognised in falls-prevention guidance, particularly important where gait has already changed.',
+        how:'Choose well-fitting, low-heeled shoes or slippers with a secure back (not open-backed) and a non-slip sole, and replace footwear showing worn or smooth soles.',
+        measurement:'Recognised guidance: avoid walking in socks alone or in loose, backless slippers on hard flooring.',
+        example:'Replacing worn, open-backed slippers with a secure, non-slip pair reduces a shuffling gait pattern that had increased fall risk in the hallway.',
+        tip:'Check the soles of existing footwear specifically for smoothness or wear — it\'s an easy detail to overlook.' },
+
+      { id:'dm49', num:'DM49', risk:'medium', title:'Furniture Arranged for Stable Support While Walking',
+        who:'Anyone who steadies themselves on furniture while moving through the home',
+        what:'Furniture that shifts, wobbles, or is too far apart to provide a stable, continuous support while walking',
+        where:'Living areas and hallways',
+        why:'Many people with reduced balance instinctively use nearby furniture as informal support while walking — arranging sturdy furniture along common routes can create a safer, more confident path without any obvious change to the room\'s appearance.',
+        how:'Arrange stable, heavy furniture (not on castors) along frequently walked routes at a comfortable, reachable spacing, and check that any furniture likely to be leaned on will not tip or slide.',
+        measurement:'No numeric standard — check by hand that any furniture along a walking route can bear a lean without moving.',
+        example:'Repositioning a solid bookcase slightly closer to the hallway route gives a father a stable point to steady himself between the living room and kitchen.',
+        tip:'Watch how the person actually moves through the home for a day before rearranging — the safest layout follows their real habits, not an assumed ideal.' },
+
+      { id:'dm50', num:'DM50', risk:'high', title:'Night-Time Lighting and Motion-Sensor Lights',
+        who:'Anyone who gets up during the night',
+        what:'Darkness on the route to the bathroom or kitchen overnight, increasing fall risk during a groggy, disoriented trip',
+        where:'Bedroom to bathroom route, and any other overnight walking path',
+        why:'Falls occurring during night-time trips to the bathroom are common and often linked to poor lighting combined with grogginess and reduced alertness immediately after waking.',
+        how:'Install motion-sensor night-lights along the bedroom-to-bathroom route that switch on automatically, removing the need to locate a switch in the dark or fumble for a lamp.',
+        measurement:'Night-light brightness: roughly 5–20 lux along walkways — enough to see clearly without disrupting sleep quality.',
+        example:'A motion-sensor light in the hallway switches on automatically as a mother gets up at 3am, lighting her path to the bathroom without her needing to find a switch.',
+        tip:'Battery-powered motion-sensor lights can be added in minutes with no wiring — one of the fastest safety wins available in this checklist.' },
+
+      { id:'dm51', num:'DM51', risk:'medium', title:'Chair and Bed Height for Safe Sitting and Standing',
+        who:'Anyone with reduced leg strength or balance during sit-to-stand movements',
+        what:'Chairs or beds that are too low or too soft, making standing up difficult and unstable',
+        where:'Living room seating and bedroom',
+        why:'The sit-to-stand transition is a common moment of instability, and a chair or bed at the right height with a firm surface makes this movement significantly safer and easier.',
+        how:'Choose or adapt seating so the person\'s knees are roughly level with or slightly below their hips when seated, add a firm cushion to raise low chairs if needed, and consider bed risers if the bed sits very low.',
+        measurement:'General guidance: seat height that allows feet to rest flat on the floor with knees at approximately 90 degrees or slightly more when seated.',
+        example:'Adding a firm supportive cushion to a low armchair makes standing up noticeably easier and reduces the need to push heavily on nearby furniture.',
+        tip:'Test the chair or bed height yourself by sitting and standing from it — you\'ll notice quickly if it feels unstable.' },
+
+      { id:'dm52', num:'DM52', risk:'low', title:'Reducing Trip Hazards from Cables and Cords',
+        who:'Every household with lamps, chargers, or electrical appliances',
+        what:'Loose cables or cords crossing a walking path',
+        where:'Living room, bedroom, and hallways',
+        why:'Cables are a common and easily overlooked trip hazard, particularly along routes walked frequently or in low light.',
+        how:'Route cables along walls using cable clips or covers rather than across open floor space, and consider wireless chargers or shorter cables where practical.',
+        measurement:'No cable should cross a walking path without being fully secured flat against the floor or rerouted along a wall.',
+        example:'Securing a lamp cord along the skirting board removes a trip point that had been crossing the middle of the bedroom floor.',
+        tip:'Do this check with the lights on and off — some cables become far more hazardous to spot once the room is dim.' },
+
+      { id:'dm53', num:'DM53', risk:'medium', title:'Mobility Aid Fit and Condition',
+        who:'Anyone using a cane, walker, or other mobility aid',
+        what:'A mobility aid that is the wrong height, worn out, or used inconsistently',
+        where:'Wherever the mobility aid is used throughout the home',
+        why:'A poorly fitted or worn mobility aid can be less stable than using no aid at all, and inconsistent use often signals either discomfort with the device or a need for reassessment.',
+        how:'Have a physiotherapist or occupational therapist check the fit and condition of any cane, walker, or frame periodically, and check rubber tips and wheels regularly for wear.',
+        measurement:'Recognised guidance: cane or walker handle height typically level with the wrist crease when standing with arms relaxed at the sides — confirm with a professional for exact fit.',
+        example:'A physiotherapist adjusts a walker\'s height slightly after noticing a stooped, unstable posture during use.',
+        tip:'If a mobility aid is being left unused in a corner, ask why — discomfort or poor fit is a common, fixable reason.' },
+
+      { id:'dm54', num:'DM54', risk:'low', title:'Outdoor Path and Step Maintenance',
+        who:'Anyone who walks outside the home, including to a garden or driveway',
+        what:'Cracked paving, uneven steps, or moss and algae build-up creating a slip or trip hazard outdoors',
+        where:'Front and back paths, garden steps, and driveway',
+        why:'Outdoor surfaces are often overlooked in home-safety reviews that focus indoors, but carry similar or greater fall risk, especially in wet or seasonal weather conditions.',
+        how:'Repair cracked or uneven paving promptly, clear moss or algae build-up regularly, and add handrails to outdoor steps where the person walks independently.',
+        measurement:'Inspect outdoor paths and steps at least each season, and after any notable weather event.',
+        example:'Clearing algae from a shaded garden step after a period of wet weather removes a slip hazard that had built up unnoticed.',
+        tip:'Pay particular attention to shaded, damp areas of the garden — they accumulate slippery growth faster than sunnier spots.' },
+
+      { id:'dm55', num:'DM55', risk:'medium', title:'Vision and Hearing Checks',
+        who:'Anyone with dementia, as sensory changes often go unreported',
+        what:'Undiagnosed or uncorrected vision or hearing changes that increase fall risk and reduce awareness of hazards',
+        where:'Reviewed with an optometrist or audiologist',
+        why:'Vision and hearing changes are a recognised, modifiable fall-risk factor, but a person with dementia may not reliably report or notice these changes themselves, making regular professional checks especially important.',
+        how:'Schedule regular vision and hearing checks, at least yearly or as recommended by a professional, and ensure any prescribed glasses or hearing aids are worn consistently and kept in good working order.',
+        measurement:'Recognised guidance: vision and hearing review at least annually, or sooner if a change in mobility or awareness is noticed.',
+        example:'An updated glasses prescription noticeably reduces a mother\'s hesitation navigating the stairs, which had been mistaken for worsening confusion rather than a vision change.',
+        tip:'A sudden increase in stumbling or hesitancy is worth checking against vision and hearing first, before assuming it reflects dementia progression alone.' },
+
+      { id:'dm56', num:'DM56', risk:'high', title:'Recognising and Responding to a Fall Safely',
+        who:'Every caregiver in the household',
+        what:'Not knowing how to respond safely if a fall does occur, risking further injury to the person or the caregiver',
+        where:'Anywhere in or around the home',
+        why:'How a fall is responded to in the first minutes matters as much as preventing it — moving someone incorrectly, or a caregiver straining themselves attempting to lift alone, can turn a manageable fall into a more serious injury.',
+        how:'Learn to check for injury and consciousness before attempting to move the person, know when to call for professional help rather than attempting to lift alone, and keep the emergency contact information on the personalised cheat sheet close at hand.',
+        measurement:'No numeric standard — always prioritise checking for injury and calling for help over attempting to move someone alone if there is any doubt.',
+        example:'Following a calm, practised response after a fall, a daughter checks for injury first and calls for professional help rather than attempting to lift her father alone, avoiding a possible secondary injury.',
+        tip:'Discuss a fall-response plan with a doctor or physiotherapist in advance, especially if the person has fallen before — a rehearsed plan reduces panic in the moment.' }
+    ]
+  },
+  {
+    id: 5, name: 'Identity, Communication & Orientation', icon: '🧭',
+    desc: '14 checks covering labelling, visible clocks and calendars, simplified routines, calm redirection and preserving dignity.',
+    checks: [
+      { id:'dm57', num:'DM57', risk:'medium', title:'Labelling Rooms and Everyday Items',
+        who:'People experiencing increasing difficulty locating familiar rooms or items',
+        what:'Unlabelled doors and drawers that require memory to navigate, increasing frustration and disorientation',
+        where:'Bedroom, bathroom, kitchen cupboards, and drawers',
+        why:'Simple, clear labels support continued independence in daily navigation, reducing frustration for the person and the need for repeated verbal direction from a caregiver.',
+        how:'Use large-print, high-contrast labels or simple pictures on key doors (bathroom, bedroom) and drawers (cutlery, clothing), placed at eye level and kept consistent once introduced.',
+        measurement:'No numeric standard — labels should be legible from normal walking distance in the room\'s typical lighting.',
+        example:'A simple picture of a toilet on the bathroom door helps a father find it independently at night, reducing anxious calling out for help.',
+        tip:'Introduce labels gradually and keep them consistent — changing them often recreates the same confusion they were meant to solve.' },
+
+      { id:'dm58', num:'DM58', risk:'medium', title:'Visible Clocks and Calendars',
+        who:'Anyone experiencing disorientation around time, day, or date',
+        what:'No easy, glanceable way to confirm the time, day, or date, increasing anxiety about missed appointments or events',
+        where:'Living room, kitchen, and bedroom',
+        why:'Large, simple, analogue-style clocks and clearly dated calendars support orientation to time, which is often one of the earliest and most distressing forms of confusion in dementia.',
+        how:'Use a large-print digital calendar clock that clearly shows the day, date, and time of day (morning/afternoon/evening) in one glance, placed somewhere frequently viewed, such as near a favourite chair.',
+        measurement:'No numeric standard — choose a display size and contrast that is comfortably readable from the person\'s usual seating distance.',
+        example:'A calendar clock showing "Tuesday afternoon" in large text reduces a mother\'s repeated anxious questions about what day it is.',
+        tip:'Look specifically for a clock designed for dementia care — many show the full context (day, date, time of day) rather than just a numeric time.' },
+
+      { id:'dm59', num:'DM59', risk:'high', title:'Simplifying Daily Choices and Routines',
+        who:'Anyone finding too many options overwhelming or paralysing',
+        what:'Complex choices — a full wardrobe, a long menu, many appointments — that cause distress or shutdown rather than decision-making',
+        where:'Throughout daily routines: dressing, meals, and activities',
+        why:'Reducing the number of choices at any one time — for example offering two outfits rather than a full wardrobe — preserves a sense of control and decision-making while reducing overwhelm.',
+        how:'Offer two or three simple options rather than an open-ended choice ("the blue jumper or the grey one?" rather than "what do you want to wear?"), and keep daily routines predictable in sequence and timing.',
+        measurement:'No numeric standard — a widely used practical guide is limiting active choices to two or three options at a time.',
+        example:'Offering two shirts instead of opening the full wardrobe resolves a father\'s daily dressing distress within days.',
+        tip:'This is about preserving choice, not removing it — the goal is a manageable decision, not a decision made for someone.' },
+
+      { id:'dm60', num:'DM60', risk:'high', title:'Calm Redirection Instead of Correction',
+        who:'Everyone communicating with the person day to day',
+        what:'Direct correction of a mistaken belief or memory, which often increases distress without changing the underlying confusion',
+        where:'Any conversation throughout the day',
+        why:'Recognised dementia-care guidance consistently favours gentle redirection over factual correction, because correcting a confused belief rarely resolves it and often causes unnecessary distress or conflict.',
+        how:'When the person expresses something factually incorrect (asking for a parent who has died, believing it is a different decade), respond to the emotion behind it and gently redirect attention rather than correcting the fact directly.',
+        measurement:'No numeric standard — success is measured by reduced distress in the moment, not factual accuracy of the response.',
+        example:'Rather than reminding her mother that her own mother died years ago, a daughter says "she\'s not here right now, tell me about her" and gently moves the conversation toward a comforting memory.',
+        tip:'Ask yourself "does correcting this help them, or only make me feel more right?" — redirection usually serves the person better.' },
+
+      { id:'dm61', num:'DM61', risk:'high', title:'Avoiding Arguments That Cause Distress',
+        who:'Every caregiver, especially during moments of disagreement or resistance',
+        what:'Arguing a point of fact or logic with someone whose reasoning ability has changed, escalating distress on both sides',
+        where:'Any interaction, but especially during care tasks or decisions',
+        why:'Arguments rarely change a confused belief and can significantly increase agitation, sometimes for hours afterward — recognised dementia-care guidance favours de-escalation and validation over winning the point.',
+        how:'Notice early signs of rising tension and pause rather than pressing the argument. Validate the emotion ("I can see this is frustrating"), then redirect to a different activity or topic rather than continuing the disagreement.',
+        measurement:'No numeric standard — the goal is to reduce, not resolve, disagreement — success is measured by de-escalation.',
+        example:'Stepping away from an argument about whether the stove was left on, and instead making tea together, resolves the tension without ever settling the original disagreement.',
+        tip:'You can be "right" or you can be helpful — in dementia care, these are often different choices, and helpful serves everyone better.' },
+
+      { id:'dm62', num:'DM62', risk:'medium', title:'Consistent Daily Routine for Security',
+        who:'Anyone who benefits from predictability in their day',
+        what:'An inconsistent or frequently changing daily schedule that increases confusion and anxiety',
+        where:'Throughout the whole day, from waking to bedtime',
+        why:'A predictable routine reduces the cognitive load of constantly re-orienting to what happens next, and recognised dementia-care guidance highlights routine as a significant source of comfort and reduced anxiety.',
+        how:'Keep waking, meal, activity, and bedtime times as consistent as practically possible, and introduce any necessary changes gradually, one at a time, rather than all at once.',
+        measurement:'No numeric standard — aim for day-to-day consistency in timing within roughly 30 minutes where possible.',
+        example:'Keeping breakfast at the same time every day, even on weekends, noticeably reduces a mother\'s morning agitation compared with a more flexible previous schedule.',
+        tip:'When a change is unavoidable (a new carer, a house move), introduce it as gently and gradually as circumstances allow.' },
+
+      { id:'dm63', num:'DM63', risk:'medium', title:'Photos and Memory Prompts Around the Home',
+        who:'Anyone who benefits from familiar visual cues to support recognition and conversation',
+        what:'A home environment with few visual anchors to support recognition of family members or shared memories',
+        where:'Living room, hallway, and bedroom',
+        why:'Familiar photographs and objects can support recognition, spark positive conversation, and offer comfort, particularly as recognition of recent events becomes harder while older memories often remain more accessible.',
+        how:'Display clearly labelled photos of close family members in prominent, frequently seen locations, and consider a simple memory book or photo album that can be looked through together.',
+        measurement:'No numeric standard — review and refresh displayed photos periodically to keep them relevant and recognisable.',
+        example:'A labelled photo of a granddaughter by the front door sparks a warm conversation each time she visits, rather than an uncertain, anxious greeting.',
+        tip:'Label photos with names and relationships in large print — this supports recognition without requiring the person to guess or feel tested.' },
+
+      { id:'dm64', num:'DM64', risk:'low', title:'Simple, Clear Signage for the Toilet and Bathroom',
+        who:'Anyone who has difficulty locating the bathroom quickly, especially at night or in an unfamiliar space',
+        what:'Confusion about which door leads to the bathroom, sometimes resulting in accidents or distress',
+        where:'Bathroom door and the route leading to it',
+        why:'Clear, simple signage reduces one of the most common and distressing sources of confusion in dementia care, supporting continued independence with toileting for longer.',
+        how:'Use a simple, high-contrast picture or word sign on the bathroom door at eye level, and consider a contrasting-colour toilet seat to make it easier to see clearly against the surrounding fixtures.',
+        measurement:'No numeric standard — choose signage that is clearly visible from the hallway in typical lighting, including at night with a night-light.',
+        example:'A simple picture sign on the bathroom door, combined with a night-light along the route, reduces night-time confusion that had previously led to an accident.',
+        tip:'A colour-contrasting toilet seat is a small, low-cost change that recognised dementia-care guidance highlights as surprisingly effective.' },
+
+      { id:'dm65', num:'DM65', risk:'medium', title:'Reducing Background Noise and Overstimulation',
+        who:'Anyone who becomes agitated or withdrawn in busy, noisy environments',
+        what:'Multiple simultaneous sources of noise or activity — television, radio, conversation — that make it hard to process any one of them',
+        where:'Living room and any shared family space',
+        why:'Reduced ability to filter competing sounds is common in dementia, and a noisy, overstimulating environment can increase confusion, agitation, or withdrawal even when no single source is loud.',
+        how:'Turn off background television or radio during conversations, limit the number of people speaking at once, and create at least one calm, quiet space the person can retreat to when needed.',
+        measurement:'No numeric standard — observe the person\'s response to the environment and reduce stimulation if agitation or withdrawal increases.',
+        example:'Turning off the television during mealtimes noticeably improves a father\'s engagement in conversation and reduces his agitation.',
+        tip:'One thing at a time — a single calm conversation is easier to follow than the same words spoken over background noise.' },
+
+      { id:'dm66', num:'DM66', risk:'high', title:'Recognising Non-Verbal Distress Signals',
+        who:'Every caregiver, particularly as verbal communication becomes more difficult',
+        what:'Distress expressed through behaviour — pacing, withdrawal, resistance to care — rather than words, going unrecognised as communication',
+        where:'Throughout daily interactions and care tasks',
+        why:'As verbal expression becomes harder, behaviour often becomes the primary way distress, pain, or unmet needs are communicated — recognising this shifts the response from correction to genuine investigation of the underlying cause.',
+        how:'Treat unusual behaviour as a signal to investigate rather than a problem to stop: consider pain, hunger, needing the toilet, overstimulation, or fear as possible underlying causes before assuming the behaviour itself is the issue.',
+        measurement:'No numeric standard — approach each behaviour change as a question ("what is this telling me?") rather than a fixed checklist.',
+        example:'Investigating a sudden increase in pacing reveals an untreated urinary tract infection, resolved with medical treatment rather than behavioural management alone.',
+        tip:'A sudden change in behaviour is often physical before it is psychological — rule out pain, infection, or discomfort first.' },
+
+      { id:'dm67', num:'DM67', risk:'medium', title:'Preserving Choice and Autonomy in Daily Tasks',
+        who:'Anyone at risk of having all daily decisions made for them by well-meaning caregivers',
+        what:'Caregivers unintentionally taking over tasks the person could still do, safely, with support',
+        where:'Throughout daily care and household tasks',
+        why:'Preserving genuine choice and participation, even in small tasks, supports dignity and can slow the loss of functional independence, while over-helping can accelerate it.',
+        how:'Identify tasks the person can still do safely with light support (choosing clothes from two options, folding laundry, watering plants) and resist the urge to complete tasks faster by doing them yourself.',
+        measurement:'No numeric standard — review periodically which tasks the person can still safely participate in, adjusting as ability changes.',
+        example:'Allowing extra time for a mother to button her own cardigan, rather than doing it for her, preserves a task she still finds meaningful to complete herself.',
+        tip:'Ask "can they do this with a little more time and patience?" before assuming a task needs to be taken over entirely.' },
+
+      { id:'dm68', num:'DM68', risk:'low', title:'Familiar Objects and Comfort Items Kept Accessible',
+        who:'Anyone who finds comfort or security in a particular object',
+        what:'Familiar, comforting items packed away, moved, or discarded during a tidy-up or care transition',
+        where:'Bedroom and favourite seating areas',
+        why:'A familiar blanket, photograph, piece of clothing, or small object can provide significant comfort and a sense of security, particularly during moments of distress or in unfamiliar situations.',
+        how:'Identify the person\'s most comforting familiar objects and keep them consistently accessible, especially during any change such as a hospital stay, respite stay, or house move.',
+        measurement:'No numeric standard — check in on whether previously comforting objects are still present and accessible after any household change.',
+        example:'Bringing a familiar cardigan to a hospital stay noticeably calms a mother during an unfamiliar and disorienting admission.',
+        tip:'Ask family members what object has always meant the most, rather than guessing — the answer is sometimes surprising.' },
+
+      { id:'dm69', num:'DM69', risk:'medium', title:'Using Names and Gentle Orientation Cues in Conversation',
+        who:'Everyone communicating regularly with the person',
+        what:'Conversations that assume recognition or context the person may no longer reliably have, increasing confusion or embarrassment',
+        where:'Any conversation, especially with less frequent visitors',
+        why:'Gently including a name or a simple piece of context at the start of a conversation ("Hi Mum, it\'s Sarah, your daughter") reduces the pressure of being expected to recognise someone without support, protecting dignity in the moment.',
+        how:'Introduce yourself naturally and warmly at the start of interactions, rather than testing recognition with "do you know who I am?" and offer simple, gentle context about the day or upcoming activity.',
+        measurement:'No numeric standard — the goal is to remove pressure to recognise or perform, not to test memory.',
+        example:'Starting each visit with "Hi Dad, it\'s James" rather than waiting to see if he remembers avoids the anxious guessing that used to open every visit.',
+        tip:'Never quiz for recognition — offer the answer warmly instead of asking the question.' },
+
+      { id:'dm70', num:'DM70', risk:'high', title:'Supporting Dignity During Personal Care',
+        who:'Every caregiver providing hands-on personal care',
+        what:'Personal care tasks carried out in a way that feels rushed, exposing, or infantilising, even when physically safe',
+        where:'Bathroom and bedroom, during washing, dressing, and toileting',
+        why:'How personal care is delivered matters as much as whether it happens — recognised dementia-care guidance consistently emphasises maintaining privacy, explaining each step, and preserving as much self-directed participation as possible.',
+        how:'Explain each step before doing it, keep the person covered as much as practically possible during care, allow them to do what they can themselves even if slower, and use calm, respectful, adult language throughout.',
+        measurement:'No numeric standard — dignity in care is assessed by the person\'s comfort and cooperation, not by speed or task completion.',
+        example:'Narrating each step of a washing routine calmly and covering the person between steps transforms a previously distressing task into one met with far less resistance.',
+        tip:'If a care task feels rushed to you, it likely feels rushed and exposing to them too — slow down wherever the schedule allows.' }
+    ]
+  },
+  {
+    id: 6, name: 'Caregiver Support & Emergency Preparedness', icon: '🤲',
+    desc: '14 checks covering recognising caregiver burnout, respite care, emergency information, and planning care transitions with compassion.',
+    checks: [
+      { id:'dm71', num:'DM71', risk:'high', title:'Recognising Caregiver Burnout as a Safety Issue',
+        who:'The primary family caregiver, and anyone supporting them',
+        what:'Exhaustion, sleep loss, or emotional strain in the caregiver that is not just a personal hardship, but a genuine household safety risk',
+        where:'Wherever caregiving takes place, essentially the whole home',
+        why:'A depleted, exhausted caregiver is more likely to make errors in medication, supervision, or judgement — caregiver wellbeing is directly linked to the safety of the person they support, not separate from it.',
+        how:'Watch for signs of burnout — persistent exhaustion, irritability, sleep disruption, withdrawal from other relationships — and treat them as seriously as any other safety check in this list. Seek support before reaching crisis point, not after.',
+        measurement:'No numeric standard — recognised guidance treats caregiver exhaustion as an early-warning sign requiring proactive support, not a personal failing to push through.',
+        example:'A daughter recognises her own rising irritability and exhaustion as a signal to arrange respite care, rather than waiting until she reaches a breaking point.',
+        tip:'Your own safety and capacity are part of the household safety plan — this is not a lesser priority than any other check in this list.' },
+
+      { id:'dm72', num:'DM72', risk:'medium', title:'Respite Care Awareness and Planning',
+        who:'Every primary caregiver, ideally arranged before it becomes urgent',
+        what:'No plan in place for temporary relief care, meaning any caregiver illness, emergency, or need for rest has no fallback',
+        where:'Arranged in advance through local social care, community, or private respite services',
+        why:'Respite care — planned, temporary support that gives the primary caregiver a genuine break — is one of the most effective tools for sustaining safe, compassionate care over the long term, and works best when arranged before a crisis forces it.',
+        how:'Research local respite options (in-home relief care, day centres, or short residential stays) before they are urgently needed, and try a short trial period early so both the caregiver and the person with dementia become familiar with it.',
+        measurement:'No numeric standard — aim to identify and trial at least one respite option well before an emergency requires it.',
+        example:'A trial half-day of respite care, arranged calmly in advance, becomes a welcome weekly routine rather than a stressful emergency measure introduced during a crisis.',
+        tip:'Introduce respite care as a normal, positive routine early — it is far easier to accept as a habit than as a sudden change during a crisis.' },
+
+      { id:'dm73', num:'DM73', risk:'high', title:'Emergency Contact and ID Information Readily Available',
+        who:'Every household, including any substitute or respite caregiver',
+        what:'Critical information — emergency contacts, medication list, diagnosis details — not readily available to whoever is present during an emergency',
+        where:'On the personalised cheat sheet in this checklist, and duplicated in a bag or by the front door',
+        why:'In a genuine emergency, whoever is present — a family member, a paramedic, a substitute carer — needs immediate access to accurate information without having to search for it or rely on someone else\'s memory.',
+        how:'Complete the personalised cheat sheet in this checklist with current emergency contacts, medication list, and key details, and keep a printed copy readily accessible, not only saved on a single phone.',
+        measurement:'Review and update the cheat sheet information at least every season, or immediately after any change.',
+        example:'A printed cheat sheet by the front door lets a first-responding neighbour give paramedics accurate information within moments of arriving, before family reach the scene.',
+        tip:'Route every emergency number through the personalised cheat sheet in this checklist — it keeps everything centralised and instantly current.' },
+
+      { id:'dm74', num:'DM74', risk:'medium', title:'Planning for Care Transitions Early',
+        who:'Families anticipating that care needs are likely to increase over time',
+        what:'Reactive, crisis-driven decisions about increased care or a change in living arrangement, made under pressure rather than in advance',
+        where:'Discussed as a family, ideally with input from the person with dementia while they are able to share preferences',
+        why:'Planning for possible future transitions — increased home support, day care, or residential care — while there is time to research calmly and involve the person\'s own preferences leads to far better outcomes than decisions forced by a sudden crisis.',
+        how:'Have an early, gentle conversation about future preferences and options while the person can still meaningfully participate, and research local services and typical processes well in advance of needing them.',
+        measurement:'No numeric standard — aim to revisit this conversation periodically as needs and circumstances change, not just once.',
+        example:'An early conversation about care preferences means the family already knows their mother\'s wishes when a decision about additional support becomes necessary.',
+        tip:'Have this conversation earlier than feels necessary — it becomes harder, not easier, to include the person\'s own voice as their condition progresses.' },
+
+      { id:'dm75', num:'DM75', risk:'medium', title:'Building a Support Network',
+        who:'Every primary caregiver, who often underestimates how much help is available or needed',
+        what:'Caregiving carried alone, without a wider network of family, friends, or community support to share the load',
+        where:'Extended family, friends, faith or community groups, and local caregiver support groups',
+        why:'A broader support network reduces caregiver isolation and burnout risk, and spreads both practical tasks and emotional support across more than one person.',
+        how:'Identify specific people willing to help with specific tasks (grocery runs, sitting with the person for an hour, phone check-ins) rather than a vague general offer of help, and look into local or online caregiver support groups for shared experience and advice.',
+        measurement:'No numeric standard — aim to identify at least a small handful of people who can each take on one concrete, recurring task.',
+        example:'Asking a specific neighbour to visit every Tuesday afternoon turns a vague "let me know if you need anything" into real, reliable support.',
+        tip:'Be specific when asking for help — a precise request is far more likely to be taken up than a general one.' },
+
+      { id:'dm76', num:'DM76', risk:'low', title:'Caregiver\'s Own Health Checks Not Neglected',
+        who:'The primary family caregiver',
+        what:'Personal medical appointments and health checks postponed or skipped due to caregiving demands',
+        where:'The caregiver\'s own healthcare, not the person they support',
+        why:'A caregiver who neglects their own health is at risk of a health crisis that removes their capacity to provide care entirely — maintaining personal health is part of sustainable, long-term caregiving, not a distraction from it.',
+        how:'Keep the caregiver\'s own routine medical appointments, including any screening or check-ups, and arrange respite or short-term cover specifically to attend them if needed.',
+        measurement:'No numeric standard — treat the caregiver\'s own health appointments with the same priority as the care recipient\'s.',
+        example:'Arranging two hours of respite care specifically to attend a postponed health check prevents a minor issue from becoming a larger one.',
+        tip:'A missed caregiver appointment is often a sign that respite support needs to be used more, not that the appointment matters less.' },
+
+      { id:'dm77', num:'DM77', risk:'medium', title:'Legal and Financial Planning Documents Accessible',
+        who:'Families managing legal and financial matters on behalf of or alongside the person with dementia',
+        what:'Important legal documents (power of attorney, advance care wishes, financial arrangements) that are unclear, outdated, or difficult to locate when needed',
+        where:'Kept in a secure but accessible location known to more than one family member',
+        why:'Having these arrangements clarified and accessible while the person can still participate in decisions, where possible, protects both their wishes and the family\'s ability to act quickly and appropriately when needed.',
+        how:'Discuss and formalise arrangements such as power of attorney or advance care preferences with appropriate legal or professional guidance, while involving the person in the decisions to the extent they are able, and keep documents somewhere secure but known to trusted family members.',
+        measurement:'No numeric standard — review these arrangements periodically, particularly after any significant change in circumstances.',
+        example:'Having power-of-attorney documents already in place allows a son to manage an urgent financial matter promptly when his father is no longer able to.',
+        tip:'Seek appropriate professional legal guidance for these arrangements — this checklist can prompt the conversation but is not a substitute for that advice.' },
+
+      { id:'dm78', num:'DM78', risk:'high', title:'Emergency Grab-Bag or Go-Bag Prepared',
+        who:'Every household, particularly useful during a hospital admission, evacuation, or unexpected overnight need',
+        what:'No pre-prepared bag ready for a sudden hospital stay, evacuation, or overnight emergency, causing delay and stress in the moment',
+        where:'Kept in an easily accessible, known location',
+        why:'A calm household during an emergency is one that doesn\'t need to think — a prepared bag with essentials ready in advance removes one significant source of stress at exactly the moment it is least helpful.',
+        how:'Prepare a bag with a few days of medication (or a note of the current prescription), a comfort item, a change of clothes, the personalised cheat sheet printout, and any key documents, and check and refresh its contents periodically.',
+        measurement:'Review and refresh the grab-bag contents at least every season, and immediately after any medication change.',
+        example:'A pre-packed bag with medication information and a comfort blanket makes an unplanned overnight hospital stay noticeably less distressing for both the person and the family.',
+        tip:'Store a duplicate, brief version of the cheat sheet directly inside the grab-bag so it travels with the person even if the main household copy is left behind.' },
+
+      { id:'dm79', num:'DM79', risk:'medium', title:'Backup Caregiver Identified and Briefed',
+        who:'Families where care currently depends on a single primary person',
+        what:'No second person familiar enough with routines, medication, and preferences to step in if the primary caregiver becomes unavailable',
+        where:'Identified among family, friends, or professional respite contacts',
+        why:'If the primary caregiver becomes ill, injured, or simply needs a break, a briefed backup caregiver prevents a gap in care and safety during exactly the moment it is most needed.',
+        how:'Identify at least one backup caregiver and walk them through key routines, medication timing, and communication approaches in a calm, unhurried moment — not for the first time during an actual emergency.',
+        measurement:'No numeric standard — aim for at least one backup caregiver briefed well enough to manage a full day of care if needed.',
+        example:'A well-briefed sibling is able to step in confidently for a week when the primary caregiver has minor surgery, because routines had already been shared in advance.',
+        tip:'Practice a full trial day with the backup caregiver present, not just a conversation — hands-on familiarity matters more than a verbal briefing alone.' },
+
+      { id:'dm80', num:'DM80', risk:'low', title:'Keeping a Shared Care Diary or Log',
+        who:'Every caregiver involved, especially where more than one person shares care duties',
+        what:'Important day-to-day observations (mood, appetite, sleep, medication timing) lost between caregivers without a shared record',
+        where:'A simple notebook or shared digital note, kept with the personalised cheat sheet',
+        why:'A shared log helps the whole care team spot patterns over time (such as increasing restlessness before wandering, per DM02) and ensures nothing important is lost between caregiver handovers.',
+        how:'Keep a brief daily note of anything notable — mood, appetite, sleep, medication timing, any incident — and review it together periodically to notice patterns worth discussing with a doctor or care team.',
+        measurement:'No numeric standard — a few lines per day is generally enough; consistency matters more than detail.',
+        example:'A shared log reveals a pattern of poor sleep on the same nights medication timing had shifted, prompting a helpful conversation with the prescriber.',
+        tip:'Keep the log brief and consistent — a few honest lines every day are more useful than detailed notes kept sporadically.' },
+
+      { id:'dm81', num:'DM81', risk:'medium', title:'Recognising Signs of Escalating Needs',
+        who:'Families monitoring how care needs change over time',
+        what:'Gradual increases in care needs that go unnoticed until a crisis makes the change unavoidable to see',
+        where:'Observed across all areas of daily life and reviewed periodically',
+        why:'Recognising a gradual increase in needs early allows the household to adapt support, safety measures, and resources calmly, rather than being caught off guard by a sudden crisis that could have been anticipated.',
+        how:'Periodically review this checklist and the shared care diary together as a household, watching specifically for areas where support that used to be sufficient no longer feels adequate.',
+        measurement:'No numeric standard — a useful practice is a brief, honest household review roughly every season.',
+        example:'A quarterly review reveals that bathing support, once occasional, is now needed daily — prompting an earlier, calmer conversation about respite or additional help than would otherwise have occurred.',
+        tip:'Revisit this whole checklist periodically, not just once — dementia care needs evolve, and so should the safeguards around them.' },
+
+      { id:'dm82', num:'DM82', risk:'medium', title:'Connecting with Dementia-Specific Support Services',
+        who:'Every family navigating dementia care, particularly early in the journey',
+        what:'Not knowing what dementia-specific support, guidance, or services exist locally and internationally',
+        where:'Local memory clinics, dementia care organisations, and recognised international resources',
+        why:'Organisations such as Alzheimer\'s Disease International and the World Health Organization publish accessible, regularly updated guidance for families, and local memory clinics or dementia care organisations often provide practical, personalised support beyond what any checklist alone can offer.',
+        how:'Ask the diagnosing doctor or memory clinic what local dementia-specific services and support groups exist, and look to recognised bodies such as WHO or Alzheimer\'s Disease International for accessible general guidance.',
+        measurement:'No numeric standard — aim to identify and make first contact with at least one dementia-specific support service.',
+        example:'A first call to a local dementia support service connects a family with a local support group they hadn\'t known existed, easing their sense of isolation considerably.',
+        tip:'Reach out earlier than feels necessary — many dementia-specific services are most helpful when support begins well before a crisis.' },
+
+      { id:'dm83', num:'DM83', risk:'low', title:'Marking Small Wins and Moments of Connection',
+        who:'The whole family, throughout the caregiving journey',
+        what:'A focus so entirely on risk and decline that moments of genuine connection and joy go unnoticed or uncelebrated',
+        where:'Throughout daily life, in ordinary moments',
+        why:'Dementia care that focuses only on managing decline can obscure the real, present relationship that still exists — noticing and marking small, good moments supports both the caregiver\'s wellbeing and the shared bond with the person they love.',
+        how:'Notice and gently acknowledge small moments of connection — a shared laugh, a recognised song, a peaceful afternoon — and consider keeping a simple note of them alongside the practical care diary.',
+        measurement:'No numeric standard — this is a practice, not a metric, worth returning to regularly.',
+        example:'Noting in the shared diary that "Mum sang along to her favourite song today" gives the family something warm to hold onto during a harder week.',
+        tip:'This checklist manages risk so that the relationship has room to remain what it has always been — look for it, and let it be enough.' },
+
+      { id:'dm84', num:'DM84', risk:'high', title:'A Compassionate Emergency and Crisis Plan',
+        who:'The whole family and care network',
+        what:'No calm, agreed plan for how to respond to a genuine crisis — a serious fall, a missing person, a medical emergency — leaving the household to improvise under pressure',
+        where:'Written and shared with everyone in the care network, alongside the personalised cheat sheet',
+        why:'A crisis handled with a clear, rehearsed, compassionate plan protects both safety and the relationship at the heart of this checklist — the aim throughout has been to keep this person safe while remaining fully, recognisably themselves, and a good crisis plan carries that same intention into the hardest moments.',
+        how:'Bring together everything in this checklist — emergency contacts, medication list, ID information, escape plan, backup caregiver — into one written plan, reviewed together as a family, and revisited every season or after any significant change. Keep it beside the personalised cheat sheet where anyone in the care network can find it.',
+        measurement:'No numeric standard — review the full plan as a family at least every season, and after any hospital stay, fall, or significant change in needs.',
+        example:'When a real emergency does arrive, a family finds that the plan they had gently prepared together lets them respond with steadiness and care, rather than panic — and that the calm, respectful relationship they had worked to protect throughout this checklist is still, entirely, there.',
+        tip:'Every check in this list has served one purpose: keeping your family member safe while they remain fully themselves. Let that be the plan\'s last word too — safety and dignity, always together.' }
+    ]
+  }
+];
+const STORE_KEY = 'safelife-dementia-pro';
+const completed = new Set();
+let lang = 'en', theme = 'dementia', mode = 'light', riskFilter = null, activeZone = 1;
+const TOTAL = 84;
+
+function t(key){ return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key; }
+function persist(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify({completed:[...completed], lang, theme, mode})); }catch(e){}
+}
+function restore(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    (d.completed||[]).forEach(id=>completed.add(id));
+    if(false && d.lang && I18N[d.lang]) lang = d.lang; /* language switching disabled for English-only release — remove "false &&" to re-enable */
+    if(d.theme) theme = d.theme;
+    if(d.mode) mode = d.mode;
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════
+// PROGRESS & STATS
+// ═══════════════════════════════════════════
+function updateProgress(){
+  const done = completed.size;
+  document.getElementById('topbar-done').textContent = done;
+  document.getElementById('progress-count').textContent = done + ' ' + t('ofWord') + ' ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (done/TOTAL*100) + '%';
+  ZONES.forEach(z=>{
+    const zDone = z.checks.filter(c=>completed.has(c.id)).length;
+    document.getElementById('ztc-'+z.id).textContent = zDone + '/14';
+  });
+  document.getElementById('celebrate').classList.toggle('show', done === TOTAL);
+  persist();
+}
+function fillStats(){
+  const counts = {critical:0,high:0,medium:0,low:0};
+  ZONES.forEach(z=>z.checks.forEach(c=>counts[c.risk]++));
+  ['critical','high','medium','low'].forEach(r=>{ document.getElementById('s-'+r).textContent = counts[r]; });
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function buildCard(check){
+  const card = document.createElement('div');
+  card.className = 'check-card' + (completed.has(check.id) ? ' completed' : '');
+  card.dataset.id = check.id;
+  card.dataset.risk = check.risk;
+  card.innerHTML =
+    '<div class="check-header">' +
+      '<div class="check-checkbox">' + (completed.has(check.id) ? '✓' : '') + '</div>' +
+      '<div class="check-num">' + check.num + '</div>' +
+      '<div class="check-risk risk-' + check.risk + '">' + t(check.risk) + '</div>' +
+      '<div class="check-title">' + check.title + '</div>' +
+      '<div class="check-chevron">▼</div>' +
+    '</div>' +
+    '<div class="check-detail">' +
+      '<div class="detail-grid">' +
+        '<div class="detail-item"><div class="detail-label"><span>👤</span>' + t('who') + '</div><div class="detail-value">' + check.who + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>⚠️</span>' + t('what') + '</div><div class="detail-value">' + check.what + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>📍</span>' + t('where') + '</div><div class="detail-value">' + check.where + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>❓</span>' + t('why') + '</div><div class="detail-value">' + check.why + '</div></div>' +
+        '<div class="detail-item full"><div class="detail-label"><span>🔧</span>' + t('how') + '</div><div class="detail-value">' + check.how + '</div></div>' +
+      '</div>' +
+      '<div class="measurement-box"><strong>📏 ' + t('standards') + '</strong>' + check.measurement + '</div>' +
+      '<div class="detail-item full" style="margin-top:10px;"><div class="detail-label"><span>💬</span>' + t('example') + '</div><div class="detail-value">' + check.example + '</div></div>' +
+      '<div class="tip-box"><span class="tip-icon">💡</span><span class="tip-text"><strong>' + t('quickTip') + ':</strong> ' + check.tip + '</span></div>' +
+    '</div>';
+  card.querySelector('.check-header').addEventListener('click', function(){ card.classList.toggle('open'); });
+  card.querySelector('.check-checkbox').addEventListener('click', function(e){
+    e.stopPropagation();
+    if(completed.has(check.id)){ completed.delete(check.id); card.classList.remove('completed'); this.textContent=''; }
+    else { completed.add(check.id); card.classList.add('completed'); this.textContent='✓'; }
+    updateProgress();
+  });
+  return card;
+}
+
+function renderAll(){
+  document.querySelectorAll('.zone-panel').forEach(p=>p.remove());
+  const main = document.getElementById('main-content');
+  ZONES.forEach(z=>{
+    const panel = document.createElement('div');
+    panel.className = 'zone-panel' + (z.id === activeZone ? ' active' : '');
+    panel.id = 'zone-panel-' + z.id;
+    const header = document.createElement('div');
+    header.className = 'zone-header';
+    header.innerHTML = '<div class="zone-icon">' + (ICONS['z'+z.id] || z.icon) + '</div><div class="zone-header-text"><h2>' + t('z'+z.id) + '</h2><p>' + t('zd'+z.id) + '</p></div>';
+    panel.appendChild(header);
+    const actions = document.createElement('div');
+    actions.className = 'zone-actions';
+    const bExpand = document.createElement('button'); bExpand.className='btn btn-outline'; bExpand.textContent=t('expandAll');
+    const bCollapse = document.createElement('button'); bCollapse.className='btn btn-outline'; bCollapse.textContent=t('collapseAll');
+    const bUnmark = document.createElement('button'); bUnmark.className='btn btn-outline'; bUnmark.textContent=t('unmarkAll');
+    const bMark = document.createElement('button'); bMark.className='btn btn-primary'; bMark.textContent=t('markAll');
+    actions.append(bExpand,bCollapse,bUnmark,bMark);
+    panel.appendChild(actions);
+    const list = document.createElement('div');
+    list.className = 'checks-list';
+    z.checks.forEach(c=>list.appendChild(buildCard(c)));
+    panel.appendChild(list);
+    const disc = document.createElement('div');
+    disc.className = 'zone-disclaimer';
+    disc.textContent = '⚕ ' + t('disclaimer');
+    panel.appendChild(disc);
+    bExpand.addEventListener('click', ()=>list.querySelectorAll('.check-card').forEach(c=>c.classList.add('open')));
+    bCollapse.addEventListener('click', ()=>list.querySelectorAll('.check-card').forEach(c=>c.classList.remove('open')));
+    bMark.addEventListener('click', ()=>{ z.checks.forEach(c=>completed.add(c.id)); refreshCards(list); });
+    bUnmark.addEventListener('click', ()=>{ z.checks.forEach(c=>completed.delete(c.id)); refreshCards(list); });
+    main.appendChild(panel);
+  });
+  applyFilters();
+  updateProgress();
+}
+function refreshCards(list){
+  list.querySelectorAll('.check-card').forEach(card=>{
+    const done = completed.has(card.dataset.id);
+    card.classList.toggle('completed', done);
+    card.querySelector('.check-checkbox').textContent = done ? '✓' : '';
+  });
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════
+// ZONES / SEARCH / FILTERS
+// ═══════════════════════════════════════════
+function switchZone(id){
+  activeZone = id;
+  document.querySelectorAll('.zone-tab').forEach(tab=>tab.classList.toggle('active', +tab.dataset.zone === id));
+  document.querySelectorAll('.zone-panel').forEach(p=>p.classList.toggle('active', p.id === 'zone-panel-' + id));
+}
+document.querySelectorAll('.zone-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{ document.getElementById('search-input').value=''; applyFilters(); switchZone(+tab.dataset.zone); });
+});
+document.querySelectorAll('.hero-badge[data-zone]').forEach(badge=>{
+  badge.addEventListener('click', ()=>{
+    switchZone(+badge.dataset.zone);
+    document.getElementById('zone-tabs').scrollIntoView({behavior:'smooth'});
+  });
+});
+document.querySelectorAll('.stat-pill[data-risk]').forEach(pill=>{
+  pill.addEventListener('click', ()=>{
+    riskFilter = (riskFilter === pill.dataset.risk) ? null : pill.dataset.risk;
+    document.querySelectorAll('.stat-pill[data-risk]').forEach(p=>p.classList.toggle('filter-on', p.dataset.risk === riskFilter));
+    applyFilters();
+  });
+});
+document.getElementById('search-input').addEventListener('input', applyFilters);
+
+function applyFilters(){
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const searching = q.length > 0;
+  let anyVisible = false;
+  ZONES.forEach(z=>{
+    const panel = document.getElementById('zone-panel-' + z.id);
+    if(!panel) return;
+    let zoneVisible = 0;
+    panel.querySelectorAll('.check-card').forEach(card=>{
+      const check = z.checks.find(c=>c.id === card.dataset.id);
+      const text = (check.title+' '+check.who+' '+check.what+' '+check.where+' '+check.why+' '+check.how+' '+check.measurement+' '+check.example+' '+check.tip).toLowerCase();
+      const matchQ = !searching || text.includes(q);
+      const matchR = !riskFilter || check.risk === riskFilter;
+      const show = matchQ && matchR;
+      card.style.display = show ? '' : 'none';
+      if(show) zoneVisible++;
+    });
+    if(searching || riskFilter){
+      panel.classList.toggle('active', zoneVisible > 0);
+      panel.querySelector('.zone-actions').style.display = 'none';
+    } else {
+      panel.classList.toggle('active', z.id === activeZone);
+      panel.querySelector('.zone-actions').style.display = '';
+    }
+    if(zoneVisible > 0) anyVisible = true;
+  });
+  document.getElementById('search-no-results').style.display = (searching || riskFilter) && !anyVisible ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════
+// THEMES / MODE / LANGUAGE
+// ═══════════════════════════════════════════
+const THEMES = [
+  {id:'dementia', name:'Dignity Lavender', c:'#9E8FB2'},
+  {id:'teal',   name:'Teal Calm',     c:'#14B8A6'},
+  {id:'amber',  name:'Warm Amber',    c:'#F59E0B'},
+  {id:'rose',   name:'Rose Care',     c:'#E11D48'},
+  {id:'violet', name:'Gentle Violet', c:'#7C3AED'},
+  {id:'ocean',  name:'Ocean Blue',    c:'#2563EB'},
+  {id:'forest', name:'Forest Green',  c:'#16A34A'}
+];
+function buildThemeMenu(){
+  const dd = document.getElementById('dd-theme');
+  dd.innerHTML = '<div class="dropdown-title">' + t('theme') + '</div>';
+  THEMES.forEach(th=>{
+    const row = document.createElement('button');
+    row.className = 'theme-row' + (th.id === theme ? ' selected' : '');
+    row.innerHTML = '<span class="theme-swatch" style="background:' + th.c + '"></span>' + th.name + (th.id === theme ? '<span class="check-mark">✓</span>' : '');
+    row.addEventListener('click', e=>{
+      e.stopPropagation();
+      theme = th.id;
+      document.body.dataset.theme = theme;
+      buildThemeMenu(); persist();
+    });
+    dd.appendChild(row);
+  });
+}
+function buildLangMenu(){
+  const dd = document.getElementById('dd-lang');
+  dd.innerHTML = '<div class="dropdown-title">🌐 Language</div>';
+  Object.keys(I18N).forEach(code=>{
+    const row = document.createElement('button');
+    row.className = 'theme-row' + (code === lang ? ' selected' : '');
+    row.innerHTML = '<span style="font-weight:800;font-size:11px;color:var(--accent);min-width:22px;">' + code.toUpperCase() + '</span>' + I18N[code].name + (code === lang ? '<span class="check-mark">✓</span>' : '');
+    row.addEventListener('click', e=>{
+      e.stopPropagation();
+      lang = code;
+      applyLang(); renderAll(); buildLangMenu(); buildManual(); buildCheat(); buildCollection(); persist();
+    });
+    dd.appendChild(row);
+  });
+  const note = document.createElement('div');
+  note.style.cssText = 'font-size:10.5px;color:var(--ink-soft);padding:8px;max-width:230px;line-height:1.4;';
+  note.textContent = t('langNote');
+  dd.appendChild(note);
+}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML = t(el.dataset.i18n); });
+  document.getElementById('search-input').placeholder = t('searchPh');
+  document.getElementById('lang-label').textContent = lang.toUpperCase();
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+}
+function toggleDropdown(id, e){
+  e.stopPropagation();
+  const dd = document.getElementById(id);
+  const wasOpen = dd.classList.contains('open');
+  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open'));
+  if(!wasOpen) dd.classList.add('open');
+}
+document.getElementById('btn-theme').addEventListener('click', e=>toggleDropdown('dd-theme', e));
+document.getElementById('btn-lang').addEventListener('click', e=>toggleDropdown('dd-lang', e));
+document.addEventListener('click', ()=>document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open')));
+document.getElementById('btn-mode').addEventListener('click', function(){
+  mode = mode === 'light' ? 'dark' : 'light';
+  document.body.dataset.mode = mode;
+  this.textContent = mode === 'light' ? '🌙' : '☀️';
+  persist();
+});
+
+// ═══════════════════════════════════════════
+// SAVE / LOAD PROGRESS
+// ═══════════════════════════════════════════
+document.getElementById('btn-save').addEventListener('click', ()=>{
+  const data = { product:'SafeLife', module:'dementia-care', version:1, savedAt:new Date().toISOString(), completed:[...completed], lang, theme, mode };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SafeLife_Dementia_Progress_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+document.getElementById('btn-load').addEventListener('click', ()=>document.getElementById('load-file').click());
+document.getElementById('load-file').addEventListener('change', function(){
+  const file = this.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const d = JSON.parse(reader.result);
+      if(d.module !== 'dementia-care' && !confirm('This file was saved from a different module. Load anyway?')) return;
+      completed.clear();
+      (d.completed||[]).forEach(id=>completed.add(id));
+      if(false && d.lang && I18N[d.lang]) lang = d.lang; /* language switching disabled for English-only release — remove "false &&" to re-enable */
+      if(d.theme) theme = d.theme;
+      if(d.mode) mode = d.mode;
+      document.body.dataset.theme = theme;
+      document.body.dataset.mode = mode;
+      document.getElementById('btn-mode').textContent = mode === 'light' ? '🌙' : '☀️';
+      applyLang(); renderAll(); buildThemeMenu(); buildLangMenu(); persist();
+    }catch(e){ alert('Could not read that file — is it a SafeLife progress file?'); }
+  };
+  reader.readAsText(file);
+  this.value = '';
+});
+
+// ═══════════════════════════════════════════
+// MODALS / PRINT / NAV
+// ═══════════════════════════════════════════
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-close').forEach(b=>b.addEventListener('click', ()=>closeModal(b.dataset.close)));
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click', e=>{ if(e.target === o) o.classList.remove('open'); }));
+document.getElementById('btn-manual').addEventListener('click', ()=>openModal('modal-manual'));
+document.getElementById('btn-cheat').addEventListener('click', ()=>openModal('modal-cheat'));
+document.getElementById('btn-print').addEventListener('click', ()=>openModal('modal-print'));
+document.getElementById('btn-search').addEventListener('click', ()=>{
+  const s = document.getElementById('search-input');
+  s.scrollIntoView({behavior:'smooth', block:'center'});
+  setTimeout(()=>s.focus(), 350);
+});
+
+function doPrint(cls){
+  document.querySelectorAll('.modal-overlay').forEach(o=>o.classList.remove('open'));
+  const wasOpen = new Set([...document.querySelectorAll('.check-card.open')]);
+  document.querySelectorAll('.check-card').forEach(c=>c.classList.add('open'));
+  if(cls) document.body.classList.add(cls);
+  const cleanup = ()=>{
+    document.body.classList.remove('print-zone','print-cheat');
+    document.querySelectorAll('.check-card').forEach(c=>{ if(!wasOpen.has(c)) c.classList.remove('open'); });
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+  setTimeout(()=>window.print(), 60);
+}
+document.getElementById('print-all').addEventListener('click', ()=>doPrint(null));
+document.getElementById('print-zone').addEventListener('click', ()=>doPrint('print-zone'));
+document.getElementById('print-cheat2').addEventListener('click', ()=>doPrint('print-cheat'));
+document.getElementById('btn-print-cheat').addEventListener('click', ()=>doPrint('print-cheat'));
+
+function visibleCards(){
+  return [...document.querySelectorAll('.zone-panel.active .check-card')].filter(c=>c.style.display !== 'none');
+}
+function nearestCardIx(cards){
+  const mark = window.innerHeight * 0.35;
+  let best = 0, bestDist = Infinity;
+  cards.forEach((c, i)=>{
+    const d = Math.abs(c.getBoundingClientRect().top - mark);
+    if(d < bestDist){ bestDist = d; best = i; }
+  });
+  return best;
+}
+function goToCard(cards, ix){
+  if(ix < 0){ window.scrollTo({top:0, behavior:'smooth'}); return; }
+  if(ix > cards.length - 1) ix = cards.length - 1;
+  const y = cards[ix].getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.35;
+  window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+}
+document.getElementById('fn-top').addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+document.getElementById('fn-next').addEventListener('click', ()=>{
+  const cards = visibleCards(); if(!cards.length) return;
+  goToCard(cards, nearestCardIx(cards) + 1);
+});
+document.getElementById('fn-prev').addEventListener('click', ()=>{
+  const cards = visibleCards(); if(!cards.length) return;
+  goToCard(cards, nearestCardIx(cards) - 1);
+});
+
+// ═══════════════════════════════════════════
+// MANUAL / CHEAT SHEET / COLLECTION
+// ═══════════════════════════════════════════
+function buildManual(){
+  document.getElementById('manual-body').innerHTML =
+    t('manualBody') +
+    '<h4>⚕</h4><p>' + t('disclaimer') + ' ' + t('langNote') + '</p>';
+}
+
+const GOLDEN_RULES = [
+  'Fit door and window alarms at every exterior exit — early awareness protects without confining',
+  'Store all medication locked and use a dosette box for daily doses',
+  'Fit smoke alarms to EN 14604 and test monthly — kitchen fire risk rises when memory does',
+  'Bathroom grab bars must be wall-fixed, never a towel rail — falls happen fastest during transfers',
+  'Light every hallway and stairway well, especially the overnight route to the bathroom',
+  'Redirect calmly instead of correcting facts — dignity matters more than being right',
+  'Keep a current photo and ID bracelet or card in case of separation from home',
+  'A GPS tracker is a tool for freedom, not surveillance — introduce it early and honestly',
+  'Caregiver exhaustion is a safety issue — arrange respite before it becomes a crisis',
+  'Keep emergency contacts, medication list and ID information on the personalised cheat sheet'
+];
+const KEY_NUMBERS = [
+  ['Smoke alarms','EN 14604 · test monthly'],
+  ['Night-light brightness','5–20 lux along walkways'],
+  ['Clear walking path','minimum 90cm (35 in) wide'],
+  ['Heat-source clearance','minimum 30cm (12 in) around hobs/toasters'],
+  ['Hot-liquid scald risk','above ~60°C (140°F) on skin contact'],
+  ['Auto shut-off (stove)','commonly 20–30 minutes unattended'],
+  ['Grab bars','wall-fixed into studs/anchors, not suction-mounted'],
+  ['Comfortable indoor temperature','18–24°C (64–75°F)'],
+  ['Medication review','at least annually, or after any hospital stay'],
+  ['ID photo refresh','at least every season'],
+  ['Care plan review','revisit whole checklist every season'],
+  ['Seat height for standing','knees level with or slightly below hips'],
+  ['Cheat sheet refresh','update within a day of any medication change'],
+  ['Grab-bag refresh','check contents every season']
+];
+
+const CONTACTS_KEY = 'safelife-dementia-contacts';
+const DEFAULT_CONTACTS = [
+  ['Emergency services',''],
+  ['GP / family doctor',''],
+  ['Dementia care specialist / memory clinic',''],
+  ['Poison control / toxicology information',''],
+  ['Pharmacist',''],
+  ['Respite care service',''],
+  ['Nearest hospital',''],
+  ['Trusted neighbour / family',''],
+  ['Backup caregiver','']
+];
+let contacts;
+try{
+  const raw = localStorage.getItem(CONTACTS_KEY);
+  contacts = raw ? JSON.parse(raw) : null;
+}catch(e){ contacts = null; }
+if(!contacts || !Array.isArray(contacts.list)) contacts = { list: DEFAULT_CONTACTS.map(c=>c.slice()), notes:'' };
+function saveContacts(){
+  try{ localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts)); }catch(e){}
+  buildCheatPrint();
+}
+function buildCheat(){
+  const body = document.getElementById('cheat-body');
+  const rules = GOLDEN_RULES.map(r=>'<li>' + r + '</li>').join('');
+  const nums = KEY_NUMBERS.map(n=>'<tr><td><strong>' + n[0] + '</strong></td><td>' + n[1] + '</td></tr>').join('');
+  body.innerHTML =
+    '<h4>📞 ' + t('cheatContacts') + '</h4>' +
+    '<p style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">' + t('cheatHint') + '</p>' +
+    '<div id="contact-rows"></div>' +
+    '<button class="btn btn-outline" id="add-contact" style="margin:8px 0 4px;">' + t('addContact') + '</button>' +
+    '<h4>⭐ ' + t('rules') + '</h4><ul class="rule-list">' + rules + '</ul>' +
+    '<h4>📏 ' + t('keyNums') + '</h4><table><tr><th>Check</th><th>Safe value / standard</th></tr>' + nums + '</table>' +
+    '<h4>📝 ' + t('myNotes') + '</h4>' +
+    '<textarea id="cheat-notes" placeholder="' + t('notesPh') + '" style="width:100%;min-height:80px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);padding:10px 12px;font-family:\'Inter\',sans-serif;font-size:13px;resize:vertical;"></textarea>';
+  renderContactRows();
+  const notesEl = document.getElementById('cheat-notes');
+  notesEl.value = contacts.notes || '';
+  notesEl.addEventListener('input', function(){ contacts.notes = this.value; saveContacts(); });
+  document.getElementById('add-contact').addEventListener('click', function(){
+    contacts.list.push(['','']);
+    renderContactRows(); saveContacts();
+    const rows = document.querySelectorAll('#contact-rows .c-name');
+    rows[rows.length-1].focus();
+  });
+  buildCheatPrint();
+}
+function renderContactRows(){
+  const wrap = document.getElementById('contact-rows');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  const inputCss = 'border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);padding:8px 10px;font-family:\'Inter\',sans-serif;font-size:13px;';
+  contacts.list.forEach((c, ix)=>{
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;margin-bottom:6px;align-items:center;';
+    const name = document.createElement('input');
+    name.className = 'c-name'; name.type = 'text'; name.value = c[0];
+    name.placeholder = 'Name / service'; name.style.cssText = inputCss + 'flex:1.4;min-width:0;';
+    const num = document.createElement('input');
+    num.type = 'text'; num.value = c[1];
+    num.placeholder = '+ number'; num.style.cssText = inputCss + 'flex:1;min-width:0;font-weight:700;';
+    const del = document.createElement('button');
+    del.textContent = '✕'; del.title = t('delRow');
+    del.style.cssText = 'border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:8px;width:30px;height:34px;cursor:pointer;flex-shrink:0;';
+    name.addEventListener('input', function(){ contacts.list[ix][0] = this.value; saveContacts(); });
+    num.addEventListener('input', function(){ contacts.list[ix][1] = this.value; saveContacts(); });
+    del.addEventListener('click', function(){ contacts.list.splice(ix,1); renderContactRows(); saveContacts(); });
+    row.append(name, num, del);
+    wrap.appendChild(row);
+  });
+}
+function buildCheatPrint(){
+  const esc = s => String(s).replace(/</g,'&lt;');
+  const filled = contacts.list.filter(c=>c[0] || c[1]);
+  const chips = filled.map(h=>'<div class="cp-chip"><b>' + esc(h[0]||'—') + '</b><span>' + (esc(h[1]) || '____________') + '</span></div>').join('');
+  const rules = GOLDEN_RULES.map(r=>'<li>' + r + '</li>').join('');
+  const nums = KEY_NUMBERS.map(n=>'<tr><td><strong>' + n[0] + '</strong></td><td>' + n[1] + '</td></tr>').join('');
+  const activeQR = getSavedQR() || QR_IMAGE;
+  const qr = activeQR
+    ? '<img src="' + activeQR + '" alt="QR">'
+    : '<div class="qr-ph">' + (STORE_URL ? esc(STORE_URL) : 'Your QR<br>code here') + '</div>';
+  document.getElementById('cheat-print').innerHTML =
+    '<div class="cp-card">' +
+      '<div class="cp-head">' + ICONS.stage +
+        '<div><div class="cp-title">Safe<em>Life</em></div>' +
+        '<div class="cp-sub">' + t('cheatTitle') + ' · ' + t('heroTitle') + '</div></div>' +
+        '<div class="cp-tag">"To all moms by a mom"<br>NEBOSH &amp; OSHA trained HSE professional</div>' +
+      '</div>' +
+      '<div class="cp-contacts">' + chips + '</div>' +
+      '<div class="cp-cols">' +
+        '<div class="cp-rules"><h3>⭐ ' + t('rules') + '</h3><ul>' + rules + '</ul></div>' +
+        '<div class="cp-numsec"><h3>📏 ' + t('keyNums') + '</h3><table>' + nums + '</table></div>' +
+      '</div>' +
+      (contacts.notes ? '<div class="cp-notes"><b>' + t('myNotes') + '</b>' + esc(contacts.notes) + '</div>' : '') +
+      '<div class="cp-foot">' +
+        '<div>Made with care by <b>' + BRAND_NAME + '</b> · SafeLife Collection<br>' + t('disclaimer') + '</div>' +
+        '<div class="cp-qr">' + (STORE_URL ? '<div style="font-size:8px;">' + esc(STORE_URL) + '<br>Scan for the full collection</div>' : '') + qr + '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+// ═══════════════════════════════════════════
+// SELLER: per-product QR code, PIN-protected (each file's own STORE_KEY keeps these separate)
+// ═══════════════════════════════════════════
+const QR_KEY = STORE_KEY + '-qr';
+const QR_PIN_KEY = STORE_KEY + '-qrpin';
+function getSavedQR(){ try{ return localStorage.getItem(QR_KEY) || ''; }catch(e){ return ''; } }
+function sellerRenderLocked(){
+  const hasPin = !!localStorage.getItem(QR_PIN_KEY);
+  document.getElementById('seller-body').innerHTML = hasPin
+    ? '<p>Enter your PIN to manage this file\'s QR code.</p><input type="password" inputmode="numeric" maxlength="12" id="seller-pin-input" placeholder="PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:10px;">'
+      + '<div class="modal-actions"><button class="btn btn-primary" id="seller-unlock">Unlock</button></div>'
+    : '<p>No PIN set yet for this file. Create one now — you\'ll need it to change the QR code later. Every product file keeps its own separate PIN and QR code.</p>'
+      + '<input type="password" inputmode="numeric" maxlength="12" id="seller-pin-new" placeholder="Create a PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:8px;">'
+      + '<input type="password" inputmode="numeric" maxlength="12" id="seller-pin-confirm" placeholder="Confirm PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:10px;">'
+      + '<div class="modal-actions"><button class="btn btn-primary" id="seller-setpin">Set PIN</button></div>';
+  if(hasPin){
+    document.getElementById('seller-unlock').addEventListener('click', function(){
+      const val = document.getElementById('seller-pin-input').value;
+      if(val && val === localStorage.getItem(QR_PIN_KEY)) sellerRenderUnlocked();
+      else alert('Incorrect PIN.');
+    });
+  } else {
+    document.getElementById('seller-setpin').addEventListener('click', function(){
+      const a = document.getElementById('seller-pin-new').value, b = document.getElementById('seller-pin-confirm').value;
+      if(!a || a.length < 4){ alert('Use at least 4 digits.'); return; }
+      if(a !== b){ alert('PINs do not match.'); return; }
+      try{ localStorage.setItem(QR_PIN_KEY, a); }catch(e){}
+      sellerRenderUnlocked();
+    });
+  }
+}
+function sellerRenderUnlocked(){
+  const current = getSavedQR();
+  document.getElementById('seller-body').innerHTML =
+    '<p>Upload this product\'s QR code image. It replaces the placeholder on the printed cheat sheet — saved on this device only, separately for every product file.</p>' +
+    (current ? '<img src="' + current + '" style="width:110px;height:110px;border:1px solid var(--line);border-radius:9px;margin-bottom:10px;object-fit:contain;background:#fff;">' : '') +
+    '<input type="file" accept="image/*" id="seller-qr-file" style="margin-bottom:10px;">' +
+    '<div class="modal-actions">' +
+      '<button class="btn btn-outline" id="seller-remove-qr">Remove QR</button>' +
+      '<button class="btn btn-outline" id="seller-change-pin">Change PIN</button>' +
+      '<button class="btn btn-primary" id="seller-done">Done</button>' +
+    '</div>';
+  document.getElementById('seller-qr-file').addEventListener('change', function(e){
+    const file = e.target.files && e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{ localStorage.setItem(QR_KEY, ev.target.result); }catch(e){}
+      buildCheatPrint();
+      sellerRenderUnlocked();
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('seller-remove-qr').addEventListener('click', function(){
+    try{ localStorage.removeItem(QR_KEY); }catch(e){}
+    buildCheatPrint();
+    sellerRenderUnlocked();
+  });
+  document.getElementById('seller-change-pin').addEventListener('click', function(){
+    try{ localStorage.removeItem(QR_PIN_KEY); }catch(e){}
+    sellerRenderLocked();
+  });
+  document.getElementById('seller-done').addEventListener('click', ()=>closeModal('modal-seller'));
+}
+document.getElementById('btn-seller').addEventListener('click', function(){ sellerRenderLocked(); openModal('modal-seller'); });
+
+const MODULES = [
+  {a:'0–28 Days'},
+  {a:'1–12 Months'},
+  {a:'1–3 Years'},
+  {a:'3–6 Years'},
+  {a:'6–12 Years'},
+  {a:'13–18 Years'},
+  {a:'19–29 Years'},
+  {a:'30–44 Years'},
+  {a:'45–64 Years'},
+  {a:'65–79 Years'},
+  {a:'80–89 Years'},
+  {a:'90+ Years'}
+];
+const MODULE_ICON_IX = [0,0,1,2,3,4,5,6,6,7,7,7];
+const SITUATION_MODULES = [
+  {name:'Pregnancy', sub:'Stage 0', status:'available', emoji:'🤰'},
+  {name:'Postpartum Recovery', sub:'Situation Module', status:'available', emoji:'🌷'},
+  {name:'Grandparent-Proofing', sub:'Situation Module', status:'available', emoji:'👵'},
+  {name:'Autism & Neurodivergent Children', sub:'Situation Module', status:'available', emoji:'♾️'},
+  {name:'Emergency Preparedness', sub:'Situation Module', status:'available', emoji:'🧳'},
+  {name:'Twins & Multiples', sub:'Situation Module', status:'available', emoji:'👯'},
+  {name:'Babysitter/Nanny Handover', sub:'Situation Module', status:'available', emoji:'🗒️'},
+  {name:'Dementia & Alzheimer\'s Care', sub:'Situation Module', status:'current', emoji:'🏠'},
+  {name:'Injury & Post-Surgery Recovery', sub:'Coming Soon', status:'available', emoji:'🩹'},
+  {name:'Chronic Conditions Household', sub:'Coming Soon', status:'available', emoji:'💊'},
+  {name:'Limited Mobility / Wheelchair', sub:'Coming Soon', status:'available', emoji:'♿'},
+  {name:'Visually / Hearing Impaired', sub:'Situation Module', status:'available', emoji:'🔔'},
+  {name:'New Pet + Baby Household', sub:'Coming Soon', status:'coming', emoji:'🐾'},
+  {name:'The Caregiver\'s Own Safety', sub:'Coming Soon', status:'coming', emoji:'🤲'},
+  {name:'New Home Move-In Audit', sub:'Coming Soon', status:'coming', emoji:'🏡'},
+  {name:'Farm & Rural Household', sub:'Coming Soon', status:'coming', emoji:'🚜'},
+  {name:'Home Office / WFH', sub:'Coming Soon', status:'coming', emoji:'💻'}
+];
+function buildSituationGrid(){
+  const grid = document.getElementById('situation-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  SITUATION_MODULES.forEach(m=>{
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const tagClass = m.status === 'coming' ? 'coming' : (m.status === 'current' ? 'owned' : 'addon');
+    const tagLabel = m.status === 'coming' ? 'Coming Soon' : (m.status === 'current' ? '✓ Current Module' : 'Available Separately');
+    card.innerHTML = '<span class="m-emoji">' + m.emoji + '</span><span class="m-name">' + m.name + '</span><span class="m-age">' + m.sub + '</span>' +
+      '<span class="module-tag ' + tagClass + '">' + tagLabel + '</span>';
+    grid.appendChild(card);
+  });
+}
+
+function buildCollection(){
+  const grid = document.getElementById('collection-grid');
+  grid.innerHTML = '';
+  MODULES.forEach((m, mi)=>{
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const iconIx = MODULE_ICON_IX[mi] != null ? MODULE_ICON_IX[mi] : mi;
+    card.innerHTML = '<span class="m-emoji">' + ICONS.stages[iconIx] + '</span><span class="m-name">' + t('mn'+(mi+1)) + '</span><span class="m-age">' + m.a + '</span>' +
+      '<span class="module-tag ' + (m.owned ? 'owned' : 'addon') + '">' + (m.owned ? t('owned') : t('addon')) + '</span>';
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+restore();
+injectIcons();
+document.body.dataset.theme = theme;
+document.body.dataset.mode = mode;
+document.getElementById('btn-mode').textContent = mode === 'light' ? '🌙' : '☀️';
+applyLang();
+fillStats();
+renderAll();
+buildThemeMenu();
+buildLangMenu();
+buildManual();
+buildCheat();
+buildCollection();
+buildSituationGrid();
+</script>
+</body>
+</html>
